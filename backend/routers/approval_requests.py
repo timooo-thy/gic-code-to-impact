@@ -18,7 +18,7 @@ async def signup(req_item: ApprovalRequestFormFromTrader, db: get_db = Depends()
     return handle_result(item)
 
 
-@router.post("/", response_model=list[GetRequest])
+@router.get("/", response_model=list[GetRequest])
 async def get_approval_requests(db: get_db = Depends()):
     item = ApprovalRequestService(db).getApprovalRequests()
     return handle_result(item)

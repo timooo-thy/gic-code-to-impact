@@ -232,7 +232,31 @@ export default function Home() {
   const [v2, setV2] = useState('');
   const [v3, setV3] = useState('');
   const [v4, setV4] = useState('');
+
   const [v5, setV5] = useState('');
+  const [v5Open, setV5Open] = useState(false);
+  
+  const [v6, setV6] = useState('');
+  const [v6Open, setV6Open] = useState(false);
+  
+  const [v7, setV7] = useState('');
+  const [v7Open, setV7Open] = useState(false);
+  
+  const [v8, setV8] = useState('');
+  const [v8Open, setV8Open] = useState(false);
+  
+  const [v9, setV9] = useState('');
+  const [v9Open, setV9Open] = useState(false);
+  
+  const [v10, setV10] = useState('');
+  const [v10Open, setV10Open] = useState(false);
+  
+  const [v11, setV11] = useState('');
+  const [v11Open, setV11Open] = useState(false);
+
+
+
+
 
   const {
     data: instrumentGroup,
@@ -785,6 +809,9 @@ export default function Home() {
                       </Select>
                     </div>
 
+
+
+                    {/* THIS IS V5...... */}
                     <div className='space-y-2 flex flex-col'>
                       <label
                         htmlFor='instrument'
@@ -792,7 +819,7 @@ export default function Home() {
                       >
                         Instrument
                       </label>
-                      <Popover open={open} onOpenChange={setOpen}>
+                      <Popover open={v5Open} onOpenChange={setV5Open}>
                         <PopoverTrigger asChild>
                           <Button
                             variant='outline'
@@ -819,18 +846,18 @@ export default function Home() {
                                     key={framework.value}
                                     value={framework.value}
                                     onSelect={currentValue => {
-                                      setValue(
-                                        currentValue == value
+                                      setV5(
+                                        currentValue == v5
                                           ? ''
                                           : currentValue
                                       );
-                                      setOpen(false);
+                                      setV5Open(false);
                                     }}
                                   >
                                     <Check
                                       className={cn(
                                         'mr-2 h-4 w-4',
-                                        value === framework.value
+                                        v5 === framework.value
                                           ? 'opacity-100'
                                           : 'opacity-0'
                                       )}
@@ -853,8 +880,8 @@ export default function Home() {
                         Settlement
                       </label>
                       <Popover
-                        open={settlementOpen}
-                        onOpenChange={setSettlementOpen}
+                        open={v6Open}
+                        onOpenChange={setV6Open}
                       >
                         <PopoverTrigger asChild>
                           <Button
@@ -882,16 +909,16 @@ export default function Home() {
                                     key={framework.value}
                                     value={framework.value}
                                     onSelect={currentValue => {
-                                      setV1(
-                                        currentValue == v1 ? '' : currentValue
+                                      setV6(
+                                        currentValue == v6 ? '' : currentValue
                                       );
-                                      setSettlementOpen(false);
+                                      setV6Open(false);
                                     }}
                                   >
                                     <Check
                                       className={cn(
                                         'mr-2 h-4 w-4',
-                                        v1 === framework.value
+                                        v6 === framework.value
                                           ? 'opacity-100'
                                           : 'opacity-0'
                                       )}
@@ -914,8 +941,8 @@ export default function Home() {
                         Trading
                       </label>
                       <Popover
-                        open={tradingoOpen}
-                        onOpenChange={setTradingOpen}
+                        open={v7Open}
+                        onOpenChange={setV7Open}
                       >
                         <PopoverTrigger asChild>
                           <Button
@@ -943,16 +970,16 @@ export default function Home() {
                                     key={framework.value}
                                     value={framework.value}
                                     onSelect={currentValue => {
-                                      setV2(
-                                        currentValue == v2 ? '' : currentValue
+                                      setV7(
+                                        currentValue == v7 ? '' : currentValue
                                       );
-                                      setTradingOpen(false);
+                                      setV7Open(false);
                                     }}
                                   >
                                     <Check
                                       className={cn(
                                         'mr-2 h-4 w-4',
-                                        v2 === framework.value
+                                        v7 === framework.value
                                           ? 'opacity-100'
                                           : 'opacity-0'
                                       )}
@@ -974,7 +1001,7 @@ export default function Home() {
                       >
                         Country
                       </label>
-                      <Popover open={countryOpen} onOpenChange={setCountryOpen}>
+                      <Popover open={v8Open} onOpenChange={setV8Open}>
                         <PopoverTrigger asChild>
                           <Button
                             variant='outline'
@@ -1001,16 +1028,16 @@ export default function Home() {
                                     key={framework.value}
                                     value={framework.value}
                                     onSelect={currentValue => {
-                                      setV3(
-                                        currentValue == v3 ? '' : currentValue
+                                      setV8(
+                                        currentValue == v8 ? '' : currentValue
                                       );
-                                      setCountryOpen(false);
+                                      setV8Open(false);
                                     }}
                                   >
                                     <Check
                                       className={cn(
                                         'mr-2 h-4 w-4',
-                                        v3 === framework.value
+                                        v8 === framework.value
                                           ? 'opacity-100'
                                           : 'opacity-0'
                                       )}
@@ -1033,8 +1060,8 @@ export default function Home() {
                         Exchange
                       </label>
                       <Popover
-                        open={exchangeOpen}
-                        onOpenChange={setExchangeOpen}
+                        open={v9Open}
+                        onOpenChange={setV9Open}
                       >
                         <PopoverTrigger asChild>
                           <Button
@@ -1062,16 +1089,16 @@ export default function Home() {
                                     key={framework.value}
                                     value={framework.value}
                                     onSelect={currentValue => {
-                                      setV4(
-                                        currentValue == v4 ? '' : currentValue
+                                      setV9(
+                                        currentValue == v9 ? '' : currentValue
                                       );
-                                      setExchangeOpen(false);
+                                      setV9Open(false);
                                     }}
                                   >
                                     <Check
                                       className={cn(
                                         'mr-2 h-4 w-4',
-                                        v4 === framework.value
+                                        v9 === framework.value
                                           ? 'opacity-100'
                                           : 'opacity-0'
                                       )}

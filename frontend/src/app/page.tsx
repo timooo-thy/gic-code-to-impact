@@ -484,7 +484,7 @@ export default function Home() {
               <label htmlFor="settlement" className="text-sm font-medium">
                 Settlement
               </label>
-              <Popover open={settlementOpen} onOpenChange={setSettlementOpen}>
+              {/* <Popover open={settlementOpen} onOpenChange={setSettlementOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -530,14 +530,17 @@ export default function Home() {
                     </CommandList>
                   </Command>
                 </PopoverContent>
-              </Popover>
+              </Popover> */}
+              <CreatableSelect isClearable options={settlementFormData} onInputSelect={(val) => {
+                setValue(val)
+              }} />
             </div>
 
             <div className="space-y-2 flex flex-col">
               <label htmlFor="settlement" className="text-sm font-medium">
                 Trading
               </label>
-              <Popover open={tradingoOpen} onOpenChange={setTradingOpen}>
+              {/* <Popover open={tradingoOpen} onOpenChange={setTradingOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -583,14 +586,17 @@ export default function Home() {
                     </CommandList>
                   </Command>
                 </PopoverContent>
-              </Popover>
+              </Popover> */}
+              <CreatableSelect isClearable options={tradingFormData} onInputSelect={(val) => {
+                setValue(val)
+              }} />
             </div>
 
             <div className="space-y-2 flex flex-col">
               <label htmlFor="settlement" className="text-sm font-medium">
                 Country
               </label>
-              <Popover open={countryOpen} onOpenChange={setCountryOpen}>
+              {/* <Popover open={countryOpen} onOpenChange={setCountryOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -636,14 +642,17 @@ export default function Home() {
                     </CommandList>
                   </Command>
                 </PopoverContent>
-              </Popover>
+              </Popover> */}
+              <CreatableSelect isClearable options={countryFormData} onInputSelect={(val) => {
+                setValue(val)
+              }} />
             </div>
 
             <div className="space-y-2 flex flex-col">
               <label htmlFor="settlement" className="text-sm font-medium">
                 Exchange
               </label>
-              <Popover open={exchangeOpen} onOpenChange={setExchangeOpen}>
+              {/* <Popover open={exchangeOpen} onOpenChange={setExchangeOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -689,7 +698,10 @@ export default function Home() {
                     </CommandList>
                   </Command>
                 </PopoverContent>
-              </Popover>
+              </Popover> */}
+              <CreatableSelect isClearable options={exchangeFormData} onInputSelect={(val) => {
+                setValue(val)
+              }} />
             </div>
           </div>
           <Button onClick={handleSearch} className="w-full">
@@ -700,10 +712,10 @@ export default function Home() {
 
       {hasSearched ? (
         <>
-          <Button onClick={handleBack} className="mb-4">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
-          </Button>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {/* <Button onClick={handleBack} className='mb-4'>
+            <ArrowLeft className='mr-2 h-4 w-4' /> Back to Dashboard
+          </Button> */}
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
             {filteredInstruments.length > 0 ? (
               filteredInstruments.map((instrument) => (
                 <Card key={instrument.id}>
@@ -910,7 +922,10 @@ export default function Home() {
                       >
                         Settlement
                       </label>
-                      <Popover open={v6Open} onOpenChange={setV6Open}>
+                      <CreatableSelect isClearable options={settlementFormData} onInputChange={(value) => {
+                        setV6(value);
+                      }} />
+                      {/* <Popover open={v6Open} onOpenChange={setV6Open}>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
@@ -958,7 +973,7 @@ export default function Home() {
                             </CommandList>
                           </Command>
                         </PopoverContent>
-                      </Popover>
+                      </Popover> */}
                     </div>
 
                     <div className="space-y-2 flex flex-col">
@@ -968,7 +983,10 @@ export default function Home() {
                       >
                         Trading
                       </label>
-                      <Popover open={v7Open} onOpenChange={setV7Open}>
+                      <CreatableSelect isClearable options={tradingFormData} onInputChange={(value) => {
+                        setV7(value);
+                      }} />
+                      {/* <Popover open={v7Open} onOpenChange={setV7Open}>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
@@ -1016,7 +1034,7 @@ export default function Home() {
                             </CommandList>
                           </Command>
                         </PopoverContent>
-                      </Popover>
+                      </Popover> */}
                     </div>
 
                     <div className="space-y-2 flex flex-col">
@@ -1026,7 +1044,10 @@ export default function Home() {
                       >
                         Country
                       </label>
-                      <Popover open={v8Open} onOpenChange={setV8Open}>
+                      <CreatableSelect isClearable options={countryFormData} onInputChange={(value) => {
+                        setV8(value);
+                      }} />
+                      {/* <Popover open={v8Open} onOpenChange={setV8Open}>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
@@ -1074,7 +1095,7 @@ export default function Home() {
                             </CommandList>
                           </Command>
                         </PopoverContent>
-                      </Popover>
+                      </Popover> */}
                     </div>
 
                     <div className="space-y-2 flex flex-col">
@@ -1084,7 +1105,10 @@ export default function Home() {
                       >
                         Exchange
                       </label>
-                      <Popover open={v9Open} onOpenChange={setV9Open}>
+                      <CreatableSelect isClearable options={exchangeFormData} onInputChange={(value) => {
+                        setV9(value);
+                      }} />
+                      {/* <Popover open={v9Open} onOpenChange={setV9Open}>
                         <PopoverTrigger asChild>
                           <Button
                             variant="outline"
@@ -1132,7 +1156,7 @@ export default function Home() {
                             </CommandList>
                           </Command>
                         </PopoverContent>
-                      </Popover>
+                      </Popover> */}
                     </div>
                   </div>
                   <Button onClick={submitApprovalRequest} className='w-full'>
@@ -1144,8 +1168,8 @@ export default function Home() {
           </div>
         </>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <Card>
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+          {/* <Card>
             <CardHeader>
               <CardTitle>Past Trading History</CardTitle>
             </CardHeader>
@@ -1194,7 +1218,7 @@ export default function Home() {
                 </Card>
               ))}
             </CardContent>
-          </Card>
+          </Card> */}
         </div>
       )}
     </div>

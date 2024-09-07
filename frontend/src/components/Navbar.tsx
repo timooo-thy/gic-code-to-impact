@@ -30,22 +30,22 @@ export default function Navbar() {
           <span className="sr-only">Acme Inc</span>
         </Link>
         <Link
-          href="#"
+          href="/"
           className="text-foreground transition-colors hover:text-foreground"
         >
           Dashboard
         </Link>
         <Link
-          href="#"
+          href="/recentTrade"
           className="text-muted-foreground transition-colors hover:text-foreground"
         >
-          Orders
+          Recent Trades
         </Link>
         <Link
-          href="#"
+          href="/status"
           className="text-muted-foreground transition-colors hover:text-foreground"
         >
-          Products
+          Approval Status
         </Link>
       </nav>
 
@@ -69,16 +69,16 @@ export default function Navbar() {
               Dashboard
             </Link>
             <Link
-              href="#"
+              href="/recentTrade"
               className="text-muted-foreground hover:text-foreground"
             >
-              Orders
+              Recent Trades
             </Link>
             <Link
-              href="#"
+              href="/status"
               className="text-muted-foreground hover:text-foreground"
             >
-              Products
+              Approval Status
             </Link>
           </nav>
         </SheetContent>

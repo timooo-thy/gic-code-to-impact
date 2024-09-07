@@ -23,6 +23,7 @@ import uFuzzy from "@leeoniya/ufuzzy";
 import { useDebounce } from "@/lib/hooks";
 import SearchBar from "./SearchBar";
 import TradeSummaryCard from "./TradeSummaryCard";
+import { toast } from "sonner";
 
 type CounterPartyLimit = {
   instrument_group: string;
@@ -53,7 +54,7 @@ export default function UserDashboard() {
         "/approved_instruments/counterparty/sum/"
     );
     if (!response.ok) {
-      console.log("Error fetching instrument group limits");
+      toast.error("Error fetching instrument group limits");
     }
 
     const counterPartyLimits = (await response.json()) as CounterPartyLimit[];
@@ -111,12 +112,11 @@ export default function UserDashboard() {
           `/approved_instruments/counterparty/${selectedInstrument}`
       );
       if (!response.ok) {
-        console.log("Error fetching counterparties");
+        toast.error("Error fetching counterparties");
       }
 
       const counterPartyLimits =
         (await response.json()) as InstrumentGroupParties[];
-      console.log(counterPartyLimits);
       counterPartyLimits.sort((a, b) =>
         a.counterparty.localeCompare(b.counterparty)
       );

@@ -59,7 +59,10 @@ jobs:
         run: |
           cd frontend
           npm run build
-        # env:
+        env:
+          NEXT_PUBLIC_FASTAPI_URL: ${{ secrets.NEXT_PUBLIC_FASTAPI_URL }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
 
   test-frontend:
     needs: setup-frontend
@@ -119,7 +122,14 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "BACKEND_ENV >> .env
+          echo "USERNAME=${{ secrets.USERNAME }}" >> .env 
+          echo "PASSWORD=${{ secrets.PASSWORD }}" >> .env
+          echo "URL=${{ secrets.URL }}" >> .env
+          echo "PORT=${{ secrets.PORT }}" >> .env
+          echo "SECRET_KEY=${{ secrets.SECRET_KEY }}" >> .env
+          echo "NEXT_PUBLIC_FASTAPI_URL=${{ secrets.NEXT_PUBLIC_FASTAPI_URL }}" >> .env
+          echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" >> .env
+          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}" >> .env
 
       - name: Build and run with Docker Compose
         run: |

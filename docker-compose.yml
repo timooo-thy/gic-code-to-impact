@@ -3,7 +3,9 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
-      # args:
+      args:
+      env:
+        - NEXT_PUBLIC_FASTAPI_URL
     ports:
       - "3000:3000"
     # environment:
@@ -14,3 +16,9 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+    environment:
+      - USERNAME
+      - PASSWORD
+      - URL
+      - PORT
+      - SECRET_KEY

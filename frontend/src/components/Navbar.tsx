@@ -93,7 +93,7 @@ export default function Navbar() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>My Dashboard</DropdownMenuLabel>
+            <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuItem
               onClick={() => {
@@ -101,6 +101,22 @@ export default function Navbar() {
               }}
             >
               Dashboard
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                router.push("/trades");
+              }}
+            >
+              Trades
+            </DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onClick={() => {
+                router.push("/approvals");
+              }}
+            >
+              Approvals
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem

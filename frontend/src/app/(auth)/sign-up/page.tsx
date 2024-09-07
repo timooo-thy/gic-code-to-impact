@@ -16,23 +16,22 @@ import { AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { signInSchema } from "@/lib/schemas";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function SignUp() {
   const [signUpObject, setSignUpObject] = useState({
     email: "",
     password: "",
   });
-  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
 
     const validatedSignUpObject = signInSchema.safeParse(signUpObject);
 
     if (!validatedSignUpObject.success) {
-      setError(validatedSignUpObject.error.errors[0].message);
+      toast.error(validatedSignUpObject.error.errors[0].message);
       return;
     }
 
@@ -53,7 +52,7 @@ export default function SignUp() {
     );
     const data = await response.json();
     if (data && data.detail) {
-      setError(data.detail.error);
+      toast.error(data.detail.error);
       return;
     }
 
@@ -108,12 +107,6 @@ export default function SignUp() {
                   }
                 />
               </div>
-              {error && (
-                <div className="text-red-500 text-sm flex items-center">
-                  <AlertCircle className="w-4 h-4 mr-2" />
-                  {error}
-                </div>
-              )}
             </div>
             <Button className="w-full mt-6" type="submit">
               Sign Up

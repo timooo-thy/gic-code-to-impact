@@ -17,8 +17,12 @@ import {
 } from "@/components/ui/table";
 import Navbar from "@/components/Navbar";
 import DashboardCard from "@/components/DashboardCard";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { supabase } from "@/lib/db";
+import uFuzzy from "@leeoniya/ufuzzy";
+import { useDebounce } from "@/lib/hooks";
+import SearchBar from "./SearchBar";
+import TradeSummaryCard from "./TradeSummaryCard";
 
 type CounterPartyLimit = {
   instrument_group: string;
@@ -112,6 +116,7 @@ export default function UserDashboard() {
 
       const counterPartyLimits =
         (await response.json()) as InstrumentGroupParties[];
+      console.log(counterPartyLimits);
       counterPartyLimits.sort((a, b) =>
         a.counterparty.localeCompare(b.counterparty)
       );
@@ -125,7 +130,7 @@ export default function UserDashboard() {
   return (
     <main className="flex min-h-screen w-4/5 flex-col m-auto">
       <Navbar />
-      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+      <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8 ">
         <div className="grid gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-5">
           {counterPartyLimits.map((instrument, id) => (
             <DashboardCard
@@ -139,7 +144,7 @@ export default function UserDashboard() {
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 max-h-[500px]">
           <LimitTable instrumentGroupParties={instrumentGroupParties} />
         </div>
-      </main>
+      </div>
     </main>
   );
 }
@@ -149,15 +154,56 @@ type LimitTableProps = {
 };
 
 const LimitTable = ({ instrumentGroupParties }: LimitTableProps) => {
+  const [searchTerm, setSearchTerm] = useState("");
+  const instrumentGroupPartiesNames = useMemo(
+    () => instrumentGroupParties.map((party) => party.counterparty),
+    [instrumentGroupParties]
+  );
+  const u = useMemo(() => new uFuzzy(), []);
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
+  const [filteredParties, setFilteredParties] =
+    useState<InstrumentGroupParties[]>();
+
+  useEffect(() => {
+    if (!debouncedSearchTerm) {
+      setFilteredParties(instrumentGroupParties);
+      return;
+    }
+
+    const idxs = u.search(instrumentGroupPartiesNames, debouncedSearchTerm, 1);
+    const filtered =
+      idxs && idxs.length > 0 && idxs[0] && idxs[0].length > 0
+        ? idxs[0].map((idx) => instrumentGroupParties[idx])
+        : [];
+
+    setFilteredParties(filtered);
+  }, [
+    debouncedSearchTerm,
+    instrumentGroupPartiesNames,
+    instrumentGroupParties,
+    u,
+  ]);
+
   return (
-    <Card className="col-span-full h-[500px] flex flex-col">
-      <CardHeader className="flex-shrink-0">
-        <CardTitle>Counterparties</CardTitle>
-        <CardDescription>
-          Available counterparties for{" "}
-          {instrumentGroupParties[0]?.instrument_group}
-        </CardDescription>
+    <Card className="col-span-full h-[500px] flex flex-col ">
+      <CardHeader className="w-full flex flex-col space-y-2">
+        <div className="flex justify-between items-center">
+          <div>
+            <CardTitle>Counterparties</CardTitle>
+            <CardDescription>
+              Available counterparties for{" "}
+              {instrumentGroupParties[0]?.instrument_group}
+            </CardDescription>
+          </div>
+          <SearchBar
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            placeHolder="Search Counterparty"
+          />
+        </div>
       </CardHeader>
+
       <CardContent className="flex-grow overflow-auto">
         <Table className="relative">
           <TableHeader className="sticky top-0 bg-background">
@@ -168,7 +214,7 @@ const LimitTable = ({ instrumentGroupParties }: LimitTableProps) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {instrumentGroupParties.map((counterParty) => (
+            {filteredParties?.map((counterParty) => (
               <TableRow key={counterParty.counterparty}>
                 <TableCell className="font-medium">
                   {counterParty.counterparty}
@@ -183,6 +229,13 @@ const LimitTable = ({ instrumentGroupParties }: LimitTableProps) => {
             ))}
           </TableBody>
         </Table>
+        <div>
+          {filteredParties?.length === 0 && (
+            <div className="text-center text-gray-500 w-full mt-10">
+              No results found for <strong>{searchTerm}</strong>
+            </div>
+          )}
+        </div>
       </CardContent>
     </Card>
   );

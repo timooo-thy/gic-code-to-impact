@@ -37,29 +37,6 @@ import Navbar from '@/components/Navbar';
 import { useGetInstruments } from '@/hooks/home';
 import { count } from 'console';
 
-const frameworks = [
-  {
-    value: 'next.js',
-    label: 'Next.js',
-  },
-  {
-    value: 'sveltekit',
-    label: 'SvelteKit',
-  },
-  {
-    value: 'nuxt.js',
-    label: 'Nuxt.js',
-  },
-  {
-    value: 'remix',
-    label: 'Remix',
-  },
-  {
-    value: 'astro',
-    label: 'Astro',
-  },
-];
-
 // Mock data for the trading instruments
 const mockTradingInstruments = [
   {
@@ -109,14 +86,6 @@ const mockTradingInstruments = [
   },
 ];
 
-// Mock data for instrument groups
-const instrumentGroups = [
-  'Stocks',
-  'Forex',
-  'Commodities',
-  'Bonds',
-  'Cryptocurrencies',
-];
 
 // Mock data for past trading history
 const mockPastTrades = [

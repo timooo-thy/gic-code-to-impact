@@ -4,7 +4,6 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
       args:
-      env:
         - NEXT_PUBLIC_FASTAPI_URL
     ports:
       - "3000:3000"

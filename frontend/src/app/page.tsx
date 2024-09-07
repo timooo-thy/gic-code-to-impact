@@ -35,7 +35,6 @@ import {
 } from '@/components/ui/popover';
 import Navbar from '@/components/Navbar';
 import { useGetInstruments } from '@/hooks/home';
-import { count } from 'console';
 
 // Mock data for the trading instruments
 const mockTradingInstruments = [

@@ -114,6 +114,22 @@ const mockPastTrades = [
   },
 ];
 
+
+const frameworks = [
+  {
+    label: "hello",
+    value: "hello",
+  },
+  {
+    label: "hello1",
+    value: "hello1",
+  },
+  {
+    label: "hello2",
+    value: "hello2",
+  }
+]
+
 // Mock data for submitted requests
 const mockSubmittedRequests = [
   {

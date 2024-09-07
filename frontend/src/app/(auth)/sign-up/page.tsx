@@ -14,22 +14,52 @@ import {
 } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { signInSchema } from "@/lib/schemas";
+import { useRouter } from "next/navigation";
 
 export default function SignUp() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [signUpObject, setSignUpObject] = useState({
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
-    if (!email || !password) {
-      setError("Please fill in all fields");
+    const validatedSignUpObject = signInSchema.safeParse(signUpObject);
+
+    if (!validatedSignUpObject.success) {
+      setError(validatedSignUpObject.error.errors[0].message);
       return;
     }
 
-    console.log("Sign in attempt with:", { email, password });
+    const validatedFullSignUpObject = {
+      ...validatedSignUpObject.data,
+      confirm_password: validatedSignUpObject.data.password,
+      role: "trader",
+    };
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_FASTAPI_URL + "/users/signup",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(validatedFullSignUpObject),
+      }
+    );
+    const data = await response.json();
+    if (data && data.detail) {
+      setError(data.detail.error);
+      return;
+    }
+
+    localStorage.setItem("jwt_token", data.access_token);
+
+    router.push("/dashboard");
   };
 
   return (
@@ -52,9 +82,10 @@ export default function SignUp() {
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
+                  value={signUpObject.email}
+                  onChange={(e) =>
+                    setSignUpObject({ ...signUpObject, email: e.target.value })
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -62,9 +93,13 @@ export default function SignUp() {
                 <Input
                   id="password"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
+                  value={signUpObject.password}
+                  onChange={(e) =>
+                    setSignUpObject({
+                      ...signUpObject,
+                      password: e.target.value,
+                    })
+                  }
                 />
               </div>
               {error && (

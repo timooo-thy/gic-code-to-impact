@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
+import CreatableSelect from 'react-select/creatable'
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -401,7 +402,7 @@ export default function Home() {
               <label htmlFor='instrument' className='text-sm font-medium'>
                 Instrument
               </label>
-              <Popover open={open} onOpenChange={setOpen}>
+              {/* <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant='outline'
@@ -449,7 +450,10 @@ export default function Home() {
                     </CommandList>
                   </Command>
                 </PopoverContent>
-              </Popover>
+              </Popover> */}
+              <CreatableSelect isClearable options={instrumentsFormData} onInputSelect={(val) => {
+                setValue(val);
+              }}/>
             </div>
 
             <div className='space-y-2 flex flex-col'>
@@ -819,7 +823,10 @@ export default function Home() {
                       >
                         Instrument
                       </label>
-                      <Popover open={v5Open} onOpenChange={setV5Open}>
+                      <CreatableSelect isClearable options={instrumentsFormData} onInputChange={(value) => {
+                        setV5(value);
+                      }}/>
+{/* <Popover open={v5Open} onOpenChange={setV5Open}>
                         <PopoverTrigger asChild>
                           <Button
                             variant='outline'
@@ -869,7 +876,7 @@ export default function Home() {
                             </CommandList>
                           </Command>
                         </PopoverContent>
-                      </Popover>
+                      </Popover> */}
                     </div>
 
                     <div className='space-y-2 flex flex-col'>

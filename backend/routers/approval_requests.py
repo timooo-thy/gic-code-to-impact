@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from ..schemas.approval_requests import ApprovalRequestFormFromTrader, CreateApprovalRequestResponseBody, GetRequest
+from ..schemas.approval_requests import ApprovalRequestFormFromTrader, GetAllRequest, CreateApprovalRequestResponseBody, GetNonApprovedRequest
 from ..schemas.users import UserToken
 from ..config.database import get_db
 from ..services.approval_requests import ApprovalRequestService
@@ -18,9 +18,15 @@ async def signup(req_item: ApprovalRequestFormFromTrader, db: get_db = Depends()
     return handle_result(item)
 
 
-@router.get("/", response_model=list[GetRequest])
+@router.get("/all_not_yet_approved", response_model=list[GetNonApprovedRequest])
 async def get_approval_requests(db: get_db = Depends()):
     item = ApprovalRequestService(db).getApprovalRequests()
+    return handle_result(item)
+
+
+@router.get("/all", response_model=list[GetAllRequest])
+async def get_approval_requests(db: get_db = Depends()):
+    item = ApprovalRequestService(db).getAllRequests()
     return handle_result(item)
 
 

@@ -78,7 +78,7 @@ export default function ApprovalPage() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [router]);
 
   return (
     <main className="flex min-h-screen w-4/5 flex-col m-auto">

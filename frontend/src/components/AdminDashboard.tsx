@@ -22,13 +22,19 @@ import { ConfirmationDialog } from "./ConfirmationDialog";
 import { IncomingRequestType } from "@/lib/types";
 import { toast } from "sonner";
 import { supabase } from "@/lib/db";
+import { useRouter } from "next/navigation";
 
 export default function AdminDashboard() {
   const [incomingRequests, setIncomingRequests] = useState<
     IncomingRequestType[]
   >([]);
+  const router = useRouter();
 
   useEffect(() => {
+    const jwtToken = localStorage.getItem("jwt_token");
+    if (!jwtToken) {
+      router.push("/sign-in");
+    }
     const fetchIncomingRequests = async () => {
       const response = await fetch(
         process.env.NEXT_PUBLIC_FASTAPI_URL + `/approval-request/all`
@@ -61,7 +67,7 @@ export default function AdminDashboard() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [router]);
 
   return (
     <main className="flex min-h-screen w-4/5 flex-col m-auto">

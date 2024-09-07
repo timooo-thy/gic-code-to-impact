@@ -1,25 +1,25 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
   CardFooter,
-} from "@/components/ui/card";
-import { ArrowLeft } from "lucide-react";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
+} from '@/components/ui/card';
+import { ArrowLeft } from 'lucide-react';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
 import {
   Command,
   CommandEmpty,
@@ -27,36 +27,36 @@ import {
   CommandInput,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
+} from '@/components/ui/command';
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import Navbar from "@/components/Navbar";
-import { useGetInstruments } from "@/hooks/home";
-import { count } from "console";
+} from '@/components/ui/popover';
+import Navbar from '@/components/Navbar';
+import { useGetInstruments } from '@/hooks/home';
+import { count } from 'console';
 
 const frameworks = [
   {
-    value: "next.js",
-    label: "Next.js",
+    value: 'next.js',
+    label: 'Next.js',
   },
   {
-    value: "sveltekit",
-    label: "SvelteKit",
+    value: 'sveltekit',
+    label: 'SvelteKit',
   },
   {
-    value: "nuxt.js",
-    label: "Nuxt.js",
+    value: 'nuxt.js',
+    label: 'Nuxt.js',
   },
   {
-    value: "remix",
-    label: "Remix",
+    value: 'remix',
+    label: 'Remix',
   },
   {
-    value: "astro",
-    label: "Astro",
+    value: 'astro',
+    label: 'Astro',
   },
 ];
 
@@ -64,85 +64,85 @@ const frameworks = [
 const mockTradingInstruments = [
   {
     id: 1,
-    name: "Apple Inc.",
-    instrumentGroup: "Stocks",
-    settlementCurrency: "USD",
-    tradeCurrency: "USD",
-    country: "USA",
-    exchange: "NASDAQ",
+    name: 'Apple Inc.',
+    instrumentGroup: 'Stocks',
+    settlementCurrency: 'USD',
+    tradeCurrency: 'USD',
+    country: 'USA',
+    exchange: 'NASDAQ',
   },
   {
     id: 2,
-    name: "EUR/USD",
-    instrumentGroup: "Forex",
-    settlementCurrency: "USD",
-    tradeCurrency: "EUR",
-    country: "Global",
-    exchange: "Forex",
+    name: 'EUR/USD',
+    instrumentGroup: 'Forex',
+    settlementCurrency: 'USD',
+    tradeCurrency: 'EUR',
+    country: 'Global',
+    exchange: 'Forex',
   },
   {
     id: 3,
-    name: "Gold Futures",
-    instrumentGroup: "Commodities",
-    settlementCurrency: "USD",
-    tradeCurrency: "USD",
-    country: "Global",
-    exchange: "CME",
+    name: 'Gold Futures',
+    instrumentGroup: 'Commodities',
+    settlementCurrency: 'USD',
+    tradeCurrency: 'USD',
+    country: 'Global',
+    exchange: 'CME',
   },
   {
     id: 4,
-    name: "UK Gilt",
-    instrumentGroup: "Bonds",
-    settlementCurrency: "GBP",
-    tradeCurrency: "GBP",
-    country: "UK",
-    exchange: "LSE",
+    name: 'UK Gilt',
+    instrumentGroup: 'Bonds',
+    settlementCurrency: 'GBP',
+    tradeCurrency: 'GBP',
+    country: 'UK',
+    exchange: 'LSE',
   },
   {
     id: 5,
-    name: "Bitcoin",
-    instrumentGroup: "Cryptocurrencies",
-    settlementCurrency: "USD",
-    tradeCurrency: "BTC",
-    country: "Global",
-    exchange: "Binance",
+    name: 'Bitcoin',
+    instrumentGroup: 'Cryptocurrencies',
+    settlementCurrency: 'USD',
+    tradeCurrency: 'BTC',
+    country: 'Global',
+    exchange: 'Binance',
   },
 ];
 
 // Mock data for instrument groups
 const instrumentGroups = [
-  "Stocks",
-  "Forex",
-  "Commodities",
-  "Bonds",
-  "Cryptocurrencies",
+  'Stocks',
+  'Forex',
+  'Commodities',
+  'Bonds',
+  'Cryptocurrencies',
 ];
 
 // Mock data for past trading history
 const mockPastTrades = [
   {
     id: 1,
-    name: "Apple Inc.",
-    instrumentGroup: "Stocks",
+    name: 'Apple Inc.',
+    instrumentGroup: 'Stocks',
     amount: 100,
     price: 150.25,
-    date: "2023-06-01",
+    date: '2023-06-01',
   },
   {
     id: 2,
-    name: "EUR/USD",
-    instrumentGroup: "Forex",
+    name: 'EUR/USD',
+    instrumentGroup: 'Forex',
     amount: 10000,
     price: 1.1234,
-    date: "2023-06-02",
+    date: '2023-06-02',
   },
   {
     id: 3,
-    name: "Gold Futures",
-    instrumentGroup: "Commodities",
+    name: 'Gold Futures',
+    instrumentGroup: 'Commodities',
     amount: 5,
     price: 1800.5,
-    date: "2023-06-03",
+    date: '2023-06-03',
   },
 ];
 
@@ -150,27 +150,27 @@ const mockPastTrades = [
 const mockSubmittedRequests = [
   {
     id: 1,
-    instrumentName: "Tesla Inc.",
-    status: "Approved",
-    date: "2023-06-04",
+    instrumentName: 'Tesla Inc.',
+    status: 'Approved',
+    date: '2023-06-04',
   },
-  { id: 2, instrumentName: "JPY/USD", status: "Pending", date: "2023-06-05" },
+  { id: 2, instrumentName: 'JPY/USD', status: 'Pending', date: '2023-06-05' },
   {
     id: 3,
-    instrumentName: "Silver Futures",
-    status: "Rejected",
-    date: "2023-06-06",
+    instrumentName: 'Silver Futures',
+    status: 'Rejected',
+    date: '2023-06-06',
   },
 ];
 
 export default function Home() {
   const [searchParams, setSearchParams] = useState({
-    instrumentGroup: "",
-    instrument: "",
-    settlementCurrency: "",
-    tradeCurrency: "",
-    country: "",
-    exchange: "",
+    instrumentGroup: '',
+    instrument: '',
+    settlementCurrency: '',
+    tradeCurrency: '',
+    country: '',
+    exchange: '',
   });
 
   const [filteredInstruments, setFilteredInstruments] = useState<
@@ -184,8 +184,8 @@ export default function Home() {
   useEffect(() => {
     if (searchParams.instrumentGroup) {
       const instruments = mockTradingInstruments
-        .filter((i) => i.instrumentGroup === searchParams.instrumentGroup)
-        .map((i) => i.name);
+        .filter(i => i.instrumentGroup === searchParams.instrumentGroup)
+        .map(i => i.name);
       setAvailableInstruments(instruments);
     } else {
       setAvailableInstruments([]);
@@ -193,25 +193,25 @@ export default function Home() {
   }, [searchParams.instrumentGroup]);
 
   const handleSearch = () => {
-    const filtered = mockTradingInstruments.filter((instrument) => {
+    const filtered = mockTradingInstruments.filter(instrument => {
       return (
-        (searchParams.instrumentGroup === "" ||
+        (searchParams.instrumentGroup === '' ||
           instrument.instrumentGroup === searchParams.instrumentGroup) &&
-        (searchParams.instrument === "" ||
+        (searchParams.instrument === '' ||
           instrument.name === searchParams.instrument) &&
-        (searchParams.settlementCurrency === "" ||
+        (searchParams.settlementCurrency === '' ||
           instrument.settlementCurrency
             .toLowerCase()
             .includes(searchParams.settlementCurrency.toLowerCase())) &&
-        (searchParams.tradeCurrency === "" ||
+        (searchParams.tradeCurrency === '' ||
           instrument.tradeCurrency
             .toLowerCase()
             .includes(searchParams.tradeCurrency.toLowerCase())) &&
-        (searchParams.country === "" ||
+        (searchParams.country === '' ||
           instrument.country
             .toLowerCase()
             .includes(searchParams.country.toLowerCase())) &&
-        (searchParams.exchange === "" ||
+        (searchParams.exchange === '' ||
           instrument.exchange
             .toLowerCase()
             .includes(searchParams.exchange.toLowerCase()))
@@ -228,7 +228,7 @@ export default function Home() {
 
   const handleSubmitNewRequest = () => {
     // Implement submit new request logic here
-    console.log("Submitting new request to approval team");
+    console.log('Submitting new request to approval team');
   };
 
   const handleBack = () => {
@@ -272,43 +272,45 @@ export default function Home() {
     isRiskCountryError ||
     isExchangeError ||
     isTradeCcyError ||
-    isSettlementCcyError
-    || !instrumentGroup 
-    || !instruments
+    isSettlementCcyError ||
+    !instrumentGroup ||
+    !instruments
   ) {
     // TODO: loading
-    console.log("loading!");
+    console.log('loading!');
 
-    return <div>
-      Loading...
-    </div>
+    return <div>Loading...</div>;
   }
 
-  console.log("instrumentGroup:", instrumentGroup);
-  console.log("instruments:", instruments);
-  console.log("riskCountry:", riskCountry);
-  console.log("exchange:", exchange);
-  console.log("tradeCcy:", tradeCcy);
-  console.log("settlementCcy:", settlementCcy);
-  
-  const instrumentsFormData: KeyValuePair[] = instruments.map((item: string) => ({
-    label: item,
-    value: item
-  }));
+  console.log('instrumentGroup:', instrumentGroup);
+  console.log('instruments:', instruments);
+  console.log('riskCountry:', riskCountry);
+  console.log('exchange:', exchange);
+  console.log('tradeCcy:', tradeCcy);
+  console.log('settlementCcy:', settlementCcy);
 
-  const settlementFormData: KeyValuePair[] = settlementCcy.map((item: string) => ({
-    label: item,
-    value: item
-  }));
+  const instrumentsFormData: KeyValuePair[] = instruments.map(
+    (item: string) => ({
+      label: item,
+      value: item,
+    })
+  );
+
+  const settlementFormData: KeyValuePair[] = settlementCcy.map(
+    (item: string) => ({
+      label: item,
+      value: item,
+    })
+  );
 
   const tradingFormData: KeyValuePair[] = tradeCcy.map((item: string) => ({
     label: item,
-    value: item
+    value: item,
   }));
 
   const countryFormData: KeyValuePair[] = riskCountry.map((item: string) => ({
     label: item,
-    value: item
+    value: item,
   }));
 
 
@@ -368,8 +370,9 @@ export default function Home() {
                     className='w-full justify-between'
                   >
                     {value
-                      ? instrumentsFormData.find(framework => framework.value === value)
-                          ?.label
+                      ? instrumentsFormData.find(
+                          framework => framework.value === value
+                        )?.label
                       : 'Select Instrument...'}
                     <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                   </Button>
@@ -742,9 +745,9 @@ export default function Home() {
                 </Card>
               ))
             ) : (
-              <Card className='mb-6'>
+              <Card className='col-span-full'>
                 <CardHeader>
-                  <CardTitle>Raise Approval Request</CardTitle>
+                  <CardTitle>Search Approved Instruments</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
@@ -768,7 +771,7 @@ export default function Home() {
                           <SelectValue placeholder='Select Instrument Group' />
                         </SelectTrigger>
                         <SelectContent>
-                          {instrumentGroups.map(group => (
+                          {instrumentGroup.map(group => (
                             <SelectItem key={group} value={group}>
                               {group}
                             </SelectItem>
@@ -792,7 +795,7 @@ export default function Home() {
                             className='w-full justify-between'
                           >
                             {value
-                              ? frameworks.find(
+                              ? instrumentsFormData.find(
                                   framework => framework.value === value
                                 )?.label
                               : 'Select Instrument...'}
@@ -805,7 +808,7 @@ export default function Home() {
                             <CommandList>
                               <CommandEmpty>No instrument found.</CommandEmpty>
                               <CommandGroup>
-                                {frameworks.map(framework => (
+                                {instrumentsFormData.map(framework => (
                                   <CommandItem
                                     key={framework.value}
                                     value={framework.value}
@@ -907,7 +910,7 @@ export default function Home() {
                     </div>
                   </div>
                   <Button onClick={handleSearch} className='w-full'>
-                    Submit Request
+                    Search
                   </Button>
                 </CardContent>
               </Card>

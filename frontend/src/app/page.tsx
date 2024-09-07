@@ -6,6 +6,45 @@ import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card"
 import { ArrowLeft } from "lucide-react"
+import { Check, ChevronsUpDown } from "lucide-react"
+import { cn } from "@/lib/utils"
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command"
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+ 
+const frameworks = [
+  {
+    value: "next.js",
+    label: "Next.js",
+  },
+  {
+    value: "sveltekit",
+    label: "SvelteKit",
+  },
+  {
+    value: "nuxt.js",
+    label: "Nuxt.js",
+  },
+  {
+    value: "remix",
+    label: "Remix",
+  },
+  {
+    value: "astro",
+    label: "Astro",
+  },
+]
+
 
 // Mock data for the trading instruments
 const mockTradingInstruments = [
@@ -88,6 +127,10 @@ export default function Home() {
     setFilteredInstruments([])
   }
 
+  const [open, setOpen] = useState(false)
+  const [openCounterParty, setOpenCounterParty] = useState(false)
+  const [value, setValue] = useState("")
+
   return (
     <div className="container mx-auto p-6">
       <h1 className="text-3xl font-bold mb-6">Home</h1>
@@ -112,21 +155,51 @@ export default function Home() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 flex flex-col">
               <label htmlFor="instrument" className="text-sm font-medium">Instrument</label>
-              <Select
-                onValueChange={(value) => setSearchParams({ ...searchParams, instrument: value })}
-                disabled={!searchParams.instrumentGroup}
-              >
-                <SelectTrigger id="instrument">
-                  <SelectValue placeholder="Select Instrument" />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableInstruments.map((instrument) => (
-                    <SelectItem key={instrument} value={instrument}>{instrument}</SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className="w-full justify-between"
+        >
+          {value
+            ? frameworks.find((framework) => framework.value === value)?.label
+            : "Select Instrument..."}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[380px] p-0">
+        <Command>
+          <CommandInput placeholder="Search Instrument..." />
+          <CommandList>
+            <CommandEmpty>No instrument found.</CommandEmpty>
+            <CommandGroup>
+              {frameworks.map((framework) => (
+                <CommandItem
+                  key={framework.value}
+                  value={framework.value}
+                  onSelect={(currentValue) => {
+                    setValue(currentValue === value ? "" : currentValue)
+                    setOpen(false)
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      value === framework.value ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  {framework.label}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>  
             </div>
             <div className="space-y-2">
               <label htmlFor="settlementCurrency" className="text-sm font-medium">Settlement Currency</label>
@@ -187,6 +260,52 @@ export default function Home() {
                     <p><strong>Trade Currency:</strong> {instrument.tradeCurrency}</p>
                     <p><strong>Country:</strong> {instrument.country}</p>
                     <p><strong>Exchange:</strong> {instrument.exchange}</p>
+                    <div className="space-y-2 flex flex-col">
+                    <p><strong>CounterParty: </strong></p>
+              <Popover open={openCounterParty} onOpenChange={setOpenCounterParty}>
+      <PopoverTrigger asChild >
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={openCounterParty}
+          className="w-full justify-between"
+        >
+          {value
+            ? frameworks.find((framework) => framework.value === value)?.label
+            : "Select CounterParty..."}
+          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[380px] p-0">
+        <Command>
+          <CommandInput placeholder="Search CounterParty..." />
+          <CommandList>
+            <CommandEmpty>No CounterParty found.</CommandEmpty>
+            <CommandGroup>
+              {frameworks.map((framework) => (
+                <CommandItem
+                  key={framework.value}
+                  value={framework.value}
+                  onSelect={(currentValue) => {
+                    setValue(currentValue === value ? "" : currentValue)
+                    setOpen(false)
+                  }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      value === framework.value ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  {framework.label}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      </PopoverContent>
+    </Popover>  
+            </div>
                   </CardContent>
                   <CardFooter>
                     <Button onClick={() => handleTrade(instrument.id)} className="w-full">Trade</Button>

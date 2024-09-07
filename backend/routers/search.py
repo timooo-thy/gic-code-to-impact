@@ -3,11 +3,22 @@ from ..config.database import get_db
 from ..services.search import SearchService
 from ..utils.service_result import handle_result
 from typing import Optional
+from enum import Enum
 
 router = APIRouter(
     prefix="/approved_instruments",
     tags=["approved_instruments"]
 )
+
+class InstrumentField(str, Enum):
+    instrument_group = "instrument_group"
+    instrument = "instrument"
+    department = "department"
+    risk_country = "risk_country"
+    exchange = "exchange"
+    trade_ccy = "trade_ccy"
+    settlement_ccy = "settlement_ccy"
+
 
 @router.get("/") 
 async def get_instruments(
@@ -18,6 +29,8 @@ async def get_instruments(
     exchange: Optional[str] = Query(None),
     trade_ccy: Optional[str] = Query(None),
     settlement_ccy: Optional[str] = Query(None),
+    limit: Optional[int] = Query(50),
+    offset: Optional[int] = Query(0),
     db: get_db = Depends()):
     item = SearchService(db).search(
         instrument_group=instrument_group,
@@ -26,14 +39,16 @@ async def get_instruments(
         risk_country=risk_country,
         exchange=exchange,
         trade_ccy=trade_ccy,
-        settlement_ccy=settlement_ccy
+        settlement_ccy=settlement_ccy,
+        limit=limit,
+        offset=offset
     )
     return handle_result(item)
 
 
 @router.get("/{field}") 
 async def get_instrument_field_list(
-    field: str, 
+    field: InstrumentField,
     db: get_db = Depends()):
     item = SearchService(db).getList(field)
     return handle_result(item)

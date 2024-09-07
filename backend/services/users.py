@@ -22,7 +22,7 @@ class UserService(AppService):
         if not user:
             return ServiceResult(AppException.InvalidItem({"error": "Incorrect email or password"}))
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-        access_token = create_access_token(data={"email": email}, expires_delta=access_token_expires)
+        access_token = create_access_token(data={"email": email, "role": user.role}, expires_delta=access_token_expires)
         user_token = UserToken(
             access_token=access_token,
             token_type="bearer"

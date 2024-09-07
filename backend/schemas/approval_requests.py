@@ -3,6 +3,7 @@ from typing import Optional
 
 
 class ApprovalRequestFormFromTrader(BaseModel):
+    email: str
     instrument_name: str
     currency: str
     country: str
@@ -14,14 +15,23 @@ class CreateApprovalRequestResponseBody(BaseModel):
     id: int
 
 
-class GetRequest(BaseModel):
-    id: int
+class GetNonApprovedRequest(BaseModel):
+    email: str
     instrument_name: str
     currency: str
     country: str
     exchange_name: str
     department: str
 
+
+class GetAllRequest(BaseModel):
+    email: str
+    instrument_name: str
+    currency: str
+    country: str
+    exchange_name: str
+    department: str
+    approved: bool
 
 
 class ApprovalRequest(BaseModel):

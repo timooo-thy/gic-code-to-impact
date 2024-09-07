@@ -3,7 +3,9 @@ __pycache__/
 
 # Virtual environment
 venv/
+.venv/
 .idea
+
 # Environment variables
 .env
 .env.*

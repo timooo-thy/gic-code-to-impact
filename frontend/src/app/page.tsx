@@ -85,7 +85,6 @@ const mockTradingInstruments = [
   },
 ];
 
-
 // Mock data for past trading history
 const mockPastTrades = [
   {
@@ -114,21 +113,20 @@ const mockPastTrades = [
   },
 ];
 
-
 const frameworks = [
   {
-    label: "hello",
-    value: "hello",
+    label: 'hello',
+    value: 'hello',
   },
   {
-    label: "hello1",
-    value: "hello1",
+    label: 'hello1',
+    value: 'hello1',
   },
   {
-    label: "hello2",
-    value: "hello2",
-  }
-]
+    label: 'hello2',
+    value: 'hello2',
+  },
+];
 
 // Mock data for submitted requests
 const mockSubmittedRequests = [
@@ -228,22 +226,45 @@ export default function Home() {
 
   const [openCounterParty, setOpenCounterParty] = useState(false);
 
+  const [value, setValue] = useState('');
 
-  const [value, setValue] = useState("");
+  const [v1, setV1] = useState('');
+  const [v2, setV2] = useState('');
+  const [v3, setV3] = useState('');
+  const [v4, setV4] = useState('');
+  const [v5, setV5] = useState('');
 
-  const [v1, setV1] = useState("");
-  const [v2, setV2] = useState("");
-  const [v3, setV3] = useState("");
-  const [v4, setV4] = useState("");
-  const [v5, setV5] = useState("");
+  const {
+    data: instrumentGroup,
+    isPending: isInstrumentGroupPending,
+    isError: isInstrumentGroupError,
+  } = useGetInstruments('instrument_group');
+  const {
+    data: instruments,
+    isPending: isInstrumentsPending,
+    isError: isInstrumentsError,
+  } = useGetInstruments('instrument');
+  const {
+    data: riskCountry,
+    isPending: isRiskCountryPending,
+    isError: isRiskCountryError,
+  } = useGetInstruments('risk_country');
+  const {
+    data: exchange,
+    isPending: isExchangePending,
+    isError: isExchangeError,
+  } = useGetInstruments('exchange');
+  const {
+    data: tradeCcy,
+    isPending: isTradeCcyPending,
+    isError: isTradeCcyError,
+  } = useGetInstruments('trade_ccy');
+  const {
+    data: settlementCcy,
+    isPending: isSettlementCcyPending,
+    isError: isSettlementCcyError,
+  } = useGetInstruments('settlement_ccy');
 
-  const { data: instrumentGroup, isPending: isInstrumentGroupPending, isError: isInstrumentGroupError } = useGetInstruments("instrument_group");
-  const { data: instruments, isPending: isInstrumentsPending, isError: isInstrumentsError } = useGetInstruments("instrument");
-  const { data: riskCountry, isPending: isRiskCountryPending, isError: isRiskCountryError } = useGetInstruments("risk_country");
-  const { data: exchange, isPending: isExchangePending, isError: isExchangeError } = useGetInstruments("exchange");
-  const { data: tradeCcy, isPending: isTradeCcyPending, isError: isTradeCcyError } = useGetInstruments("trade_ccy");
-  const { data: settlementCcy, isPending: isSettlementCcyPending, isError: isSettlementCcyError } = useGetInstruments("settlement_ccy");
-  
   if (
     isInstrumentGroupPending ||
     isInstrumentsPending ||
@@ -297,10 +318,9 @@ export default function Home() {
     value: item,
   }));
 
-
   const exchangeFormData: KeyValuePair[] = exchange.map((item: string) => ({
     label: item,
-    value: item
+    value: item,
   }));
 
   return (
@@ -337,9 +357,6 @@ export default function Home() {
                 </SelectContent>
               </Select>
             </div>
-
-
-
 
             <div className='space-y-2 flex flex-col'>
               <label htmlFor='instrument' className='text-sm font-medium'>
@@ -396,8 +413,6 @@ export default function Home() {
               </Popover>
             </div>
 
-
-
             <div className='space-y-2 flex flex-col'>
               <label htmlFor='settlement' className='text-sm font-medium'>
                 Settlement
@@ -411,8 +426,9 @@ export default function Home() {
                     className='w-full justify-between'
                   >
                     {v1
-                      ? settlementFormData.find(framework => framework.value === v1)
-                          ?.label
+                      ? settlementFormData.find(
+                          framework => framework.value === v1
+                        )?.label
                       : 'Select Settlement...'}
                     <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                   </Button>
@@ -428,9 +444,7 @@ export default function Home() {
                             key={framework.value}
                             value={framework.value}
                             onSelect={currentValue => {
-                              setV1(
-                                currentValue == v1 ? '' : currentValue
-                              )
+                              setV1(currentValue == v1 ? '' : currentValue);
                               setSettlementOpen(false);
                             }}
                           >
@@ -450,11 +464,7 @@ export default function Home() {
                   </Command>
                 </PopoverContent>
               </Popover>
-            </div> 
-
-
-
-
+            </div>
 
             <div className='space-y-2 flex flex-col'>
               <label htmlFor='settlement' className='text-sm font-medium'>
@@ -469,8 +479,9 @@ export default function Home() {
                     className='w-full justify-between'
                   >
                     {v2
-                      ? tradingFormData.find(framework => framework.value === v2)
-                          ?.label
+                      ? tradingFormData.find(
+                          framework => framework.value === v2
+                        )?.label
                       : 'Select Trading...'}
                     <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                   </Button>
@@ -486,9 +497,7 @@ export default function Home() {
                             key={framework.value}
                             value={framework.value}
                             onSelect={currentValue => {
-                              setV2(
-                                currentValue == v2 ? '' : currentValue
-                              )
+                              setV2(currentValue == v2 ? '' : currentValue);
                               setTradingOpen(false);
                             }}
                           >
@@ -508,8 +517,7 @@ export default function Home() {
                   </Command>
                 </PopoverContent>
               </Popover>
-            </div> 
-
+            </div>
 
             <div className='space-y-2 flex flex-col'>
               <label htmlFor='settlement' className='text-sm font-medium'>
@@ -524,8 +532,9 @@ export default function Home() {
                     className='w-full justify-between'
                   >
                     {v3
-                      ? countryFormData.find(framework => framework.value === v3)
-                          ?.label
+                      ? countryFormData.find(
+                          framework => framework.value === v3
+                        )?.label
                       : 'Select Country...'}
                     <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                   </Button>
@@ -541,9 +550,7 @@ export default function Home() {
                             key={framework.value}
                             value={framework.value}
                             onSelect={currentValue => {
-                              setV3(
-                                currentValue == v3 ? '' : currentValue
-                              );
+                              setV3(currentValue == v3 ? '' : currentValue);
                               setCountryOpen(false);
                             }}
                           >
@@ -563,13 +570,7 @@ export default function Home() {
                   </Command>
                 </PopoverContent>
               </Popover>
-            </div> 
-
-
-
-
-
-
+            </div>
 
             <div className='space-y-2 flex flex-col'>
               <label htmlFor='settlement' className='text-sm font-medium'>
@@ -584,8 +585,9 @@ export default function Home() {
                     className='w-full justify-between'
                   >
                     {v4
-                      ? exchangeFormData.find(framework => framework.value === v4)
-                          ?.label
+                      ? exchangeFormData.find(
+                          framework => framework.value === v4
+                        )?.label
                       : 'Select Exchange...'}
                     <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                   </Button>
@@ -601,9 +603,7 @@ export default function Home() {
                             key={framework.value}
                             value={framework.value}
                             onSelect={currentValue => {
-                              setV4(
-                                currentValue == v4 ? '' : currentValue
-                              );
+                              setV4(currentValue == v4 ? '' : currentValue);
                               setExchangeOpen(false);
                             }}
                           >
@@ -623,9 +623,7 @@ export default function Home() {
                   </Command>
                 </PopoverContent>
               </Popover>
-            </div> 
-
-
+            </div>
           </div>
           <Button onClick={handleSearch} className='w-full'>
             Search
@@ -739,7 +737,7 @@ export default function Home() {
             ) : (
               <Card className='col-span-full'>
                 <CardHeader>
-                  <CardTitle>Search Approved Instruments</CardTitle>
+                  <CardTitle>Submit Approval Request</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
@@ -771,6 +769,7 @@ export default function Home() {
                         </SelectContent>
                       </Select>
                     </div>
+
                     <div className='space-y-2 flex flex-col'>
                       <label
                         htmlFor='instrument'
@@ -806,7 +805,7 @@ export default function Home() {
                                     value={framework.value}
                                     onSelect={currentValue => {
                                       setValue(
-                                        currentValue === value
+                                        currentValue == value
                                           ? ''
                                           : currentValue
                                       );
@@ -830,79 +829,250 @@ export default function Home() {
                         </PopoverContent>
                       </Popover>
                     </div>
-                    <div className='space-y-2'>
+
+                    <div className='space-y-2 flex flex-col'>
                       <label
-                        htmlFor='settlementCurrency'
+                        htmlFor='settlement'
                         className='text-sm font-medium'
                       >
-                        Settlement Currency
+                        Settlement
                       </label>
-                      <Input
-                        id='settlementCurrency'
-                        placeholder='Settlement Currency'
-                        value={searchParams.settlementCurrency}
-                        onChange={e =>
-                          setSearchParams({
-                            ...searchParams,
-                            settlementCurrency: e.target.value,
-                          })
-                        }
-                      />
+                      <Popover
+                        open={settlementOpen}
+                        onOpenChange={setSettlementOpen}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant='outline'
+                            role='combobox'
+                            aria-expanded={open}
+                            className='w-full justify-between'
+                          >
+                            {v1
+                              ? settlementFormData.find(
+                                  framework => framework.value === v1
+                                )?.label
+                              : 'Select Settlement...'}
+                            <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className='w-[380px] p-0'>
+                          <Command>
+                            <CommandInput placeholder='Search Settlement...' />
+                            <CommandList>
+                              <CommandEmpty>No Settlement found.</CommandEmpty>
+                              <CommandGroup>
+                                {settlementFormData.map(framework => (
+                                  <CommandItem
+                                    key={framework.value}
+                                    value={framework.value}
+                                    onSelect={currentValue => {
+                                      setV1(
+                                        currentValue == v1 ? '' : currentValue
+                                      );
+                                      setSettlementOpen(false);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        'mr-2 h-4 w-4',
+                                        v1 === framework.value
+                                          ? 'opacity-100'
+                                          : 'opacity-0'
+                                      )}
+                                    />
+                                    {framework.label}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                     </div>
-                    <div className='space-y-2'>
+
+                    <div className='space-y-2 flex flex-col'>
                       <label
-                        htmlFor='tradeCurrency'
+                        htmlFor='settlement'
                         className='text-sm font-medium'
                       >
-                        Trade Currency
+                        Trading
                       </label>
-                      <Input
-                        id='tradeCurrency'
-                        placeholder='Trade Currency'
-                        value={searchParams.tradeCurrency}
-                        onChange={e =>
-                          setSearchParams({
-                            ...searchParams,
-                            tradeCurrency: e.target.value,
-                          })
-                        }
-                      />
+                      <Popover
+                        open={tradingoOpen}
+                        onOpenChange={setTradingOpen}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant='outline'
+                            role='combobox'
+                            aria-expanded={open}
+                            className='w-full justify-between'
+                          >
+                            {v2
+                              ? tradingFormData.find(
+                                  framework => framework.value === v2
+                                )?.label
+                              : 'Select Trading...'}
+                            <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className='w-[380px] p-0'>
+                          <Command>
+                            <CommandInput placeholder='Search Trading...' />
+                            <CommandList>
+                              <CommandEmpty>No Trading found.</CommandEmpty>
+                              <CommandGroup>
+                                {tradingFormData.map(framework => (
+                                  <CommandItem
+                                    key={framework.value}
+                                    value={framework.value}
+                                    onSelect={currentValue => {
+                                      setV2(
+                                        currentValue == v2 ? '' : currentValue
+                                      );
+                                      setTradingOpen(false);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        'mr-2 h-4 w-4',
+                                        v2 === framework.value
+                                          ? 'opacity-100'
+                                          : 'opacity-0'
+                                      )}
+                                    />
+                                    {framework.label}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                     </div>
-                    <div className='space-y-2'>
-                      <label htmlFor='country' className='text-sm font-medium'>
+
+                    <div className='space-y-2 flex flex-col'>
+                      <label
+                        htmlFor='settlement'
+                        className='text-sm font-medium'
+                      >
                         Country
                       </label>
-                      <Input
-                        id='country'
-                        placeholder='Country'
-                        value={searchParams.country}
-                        onChange={e =>
-                          setSearchParams({
-                            ...searchParams,
-                            country: e.target.value,
-                          })
-                        }
-                      />
+                      <Popover open={countryOpen} onOpenChange={setCountryOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant='outline'
+                            role='combobox'
+                            aria-expanded={open}
+                            className='w-full justify-between'
+                          >
+                            {v3
+                              ? countryFormData.find(
+                                  framework => framework.value === v3
+                                )?.label
+                              : 'Select Country...'}
+                            <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className='w-[380px] p-0'>
+                          <Command>
+                            <CommandInput placeholder='Search Country...' />
+                            <CommandList>
+                              <CommandEmpty>No Trading found.</CommandEmpty>
+                              <CommandGroup>
+                                {countryFormData.map(framework => (
+                                  <CommandItem
+                                    key={framework.value}
+                                    value={framework.value}
+                                    onSelect={currentValue => {
+                                      setV3(
+                                        currentValue == v3 ? '' : currentValue
+                                      );
+                                      setCountryOpen(false);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        'mr-2 h-4 w-4',
+                                        v3 === framework.value
+                                          ? 'opacity-100'
+                                          : 'opacity-0'
+                                      )}
+                                    />
+                                    {framework.label}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                     </div>
-                    <div className='space-y-2'>
-                      <label htmlFor='exchange' className='text-sm font-medium'>
+
+                    <div className='space-y-2 flex flex-col'>
+                      <label
+                        htmlFor='settlement'
+                        className='text-sm font-medium'
+                      >
                         Exchange
                       </label>
-                      <Input
-                        id='exchange'
-                        placeholder='Exchange'
-                        value={searchParams.exchange}
-                        onChange={e =>
-                          setSearchParams({
-                            ...searchParams,
-                            exchange: e.target.value,
-                          })
-                        }
-                      />
+                      <Popover
+                        open={exchangeOpen}
+                        onOpenChange={setExchangeOpen}
+                      >
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant='outline'
+                            role='combobox'
+                            aria-expanded={open}
+                            className='w-full justify-between'
+                          >
+                            {v4
+                              ? exchangeFormData.find(
+                                  framework => framework.value === v4
+                                )?.label
+                              : 'Select Exchange...'}
+                            <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className='w-[380px] p-0'>
+                          <Command>
+                            <CommandInput placeholder='Search Exchange...' />
+                            <CommandList>
+                              <CommandEmpty>No Exchange found.</CommandEmpty>
+                              <CommandGroup>
+                                {exchangeFormData.map(framework => (
+                                  <CommandItem
+                                    key={framework.value}
+                                    value={framework.value}
+                                    onSelect={currentValue => {
+                                      setV4(
+                                        currentValue == v4 ? '' : currentValue
+                                      );
+                                      setExchangeOpen(false);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        'mr-2 h-4 w-4',
+                                        v4 === framework.value
+                                          ? 'opacity-100'
+                                          : 'opacity-0'
+                                      )}
+                                    />
+                                    {framework.label}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
                     </div>
                   </div>
                   <Button onClick={handleSearch} className='w-full'>
-                    Search
+                    Submit
                   </Button>
                 </CardContent>
               </Card>

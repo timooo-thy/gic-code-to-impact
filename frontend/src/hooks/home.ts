@@ -1,11 +1,11 @@
-    import { useQuery } from "@tanstack/react-query";
+    import { useMutation, useQuery } from "@tanstack/react-query";
 
 export const useGetInstruments = (field: string) => {
   return useQuery({
     queryKey: ['instruments', field],
     queryFn: () => {
         // field must be a valid value!!
-      return fetch(`http://localhost:8000/approved_instruments/${field}`)
+      return fetch(`${process.env.NEXT_PUBLIC_FASTAPI_URL}/approved_instruments/${field}`)
         .then(response => {
           if (!response.ok) {
             return Promise.reject(new Error('Network response was not ok'));
@@ -17,21 +17,34 @@ export const useGetInstruments = (field: string) => {
     },
   });
 };
+export interface ApprovalRequestPayload {
+  email: string;
+  instrument_name: string;
+  settlement_ccy: string;
+  trading_ccy: string;
+  country: string;
+  exchange_name: string;
+  department: string;
+}
 
-export const useCreateApprovalRequest = (field: string) => {
-    return useQuery({
-      queryKey: ['instruments', field],
-      queryFn: () => {
-          // field must be a valid value!!
-        return fetch(`http://localhost:8000/approved_instruments/${field}`)
-          .then(response => {
+export const useCreateApprovalRequestMutation = () => {
+  return useMutation({
+    mutationFn: async (payload: ApprovalRequestPayload) => {
+        const response = await fetch(`${process.env.NEXT_PUBLIC_FASTAPI_URL}/approval-request`, {
+            mode: "no-cors",
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload),
+        }).then(response => {
             if (!response.ok) {
-              return Promise.reject(new Error('Network response was not ok'));
+                return Promise.reject("network bad");
             }
             return response.json(); // Parse the response body as JSON
-          }).then(res => {
-              return res;
-          })
-      },
-    });
-  };
+        }).then(res => {
+            return res;
+        })
+      }
+  });
+};

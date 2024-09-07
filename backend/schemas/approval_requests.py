@@ -5,7 +5,8 @@ from typing import Optional
 class ApprovalRequestFormFromTrader(BaseModel):
     email: str
     instrument_name: str
-    currency: str
+    settlement_ccy: str
+    trading_ccy: str
     country: str
     exchange_name: str
     department: str

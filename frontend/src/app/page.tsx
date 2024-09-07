@@ -35,7 +35,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import Navbar from '@/components/Navbar';
-import { useGetInstruments } from '@/hooks/home';
+import { useCreateApprovalRequestMutation, useGetInstruments } from '@/hooks/home';
 
 // Mock data for the trading instruments
 const mockTradingInstruments = [
@@ -174,6 +174,29 @@ export default function Home() {
       setAvailableInstruments([]);
     }
   }, [searchParams.instrumentGroup]);
+
+  // export interface ApprovalRequestPayload {
+  //   email: string;
+  //   instrument_name: string;
+  //   currency: string;
+  //   country: string;
+  //   exchange_name: string;
+  //   department: string;
+  // }
+
+  const approvalRequestMutation = useCreateApprovalRequestMutation();
+
+  const submitApprovalRequest = () => {
+    approvalRequestMutation.mutate({
+      email: "btjm123@gmail.com",
+      instrument_name: v5,
+      settlement_ccy: v6,
+      trading_ccy: v7,
+      country: v8,
+      exchange_name: v9,
+      department: "btjm123",
+    })
+  }
 
   const handleSearch = () => {
     const filtered = mockTradingInstruments.filter(instrument => {
@@ -897,9 +920,9 @@ export default function Home() {
                             aria-expanded={open}
                             className='w-full justify-between'
                           >
-                            {v1
+                            {v6
                               ? settlementFormData.find(
-                                  framework => framework.value === v1
+                                  framework => framework.value === v6
                                 )?.label
                               : 'Select Settlement...'}
                             <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
@@ -958,9 +981,9 @@ export default function Home() {
                             aria-expanded={open}
                             className='w-full justify-between'
                           >
-                            {v2
+                            {v7
                               ? tradingFormData.find(
-                                  framework => framework.value === v2
+                                  framework => framework.value === v7
                                 )?.label
                               : 'Select Trading...'}
                             <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
@@ -1016,9 +1039,9 @@ export default function Home() {
                             aria-expanded={open}
                             className='w-full justify-between'
                           >
-                            {v3
+                            {v8
                               ? countryFormData.find(
-                                  framework => framework.value === v3
+                                  framework => framework.value === v8
                                 )?.label
                               : 'Select Country...'}
                             <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
@@ -1077,9 +1100,9 @@ export default function Home() {
                             aria-expanded={open}
                             className='w-full justify-between'
                           >
-                            {v4
+                            {v9
                               ? exchangeFormData.find(
-                                  framework => framework.value === v4
+                                  framework => framework.value === v9
                                 )?.label
                               : 'Select Exchange...'}
                             <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
@@ -1120,8 +1143,8 @@ export default function Home() {
                       </Popover>
                     </div>
                   </div>
-                  <Button onClick={handleSearch} className='w-full'>
-                    Submit
+                  <Button onClick={submitApprovalRequest} className='w-full'>
+                    Submit Approval Request
                   </Button>
                 </CardContent>
               </Card>

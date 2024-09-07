@@ -29,8 +29,10 @@ class ApprovalRequestService(AppService):
 class ApprovalRequestCRUD(AppCRUD):
     def createApprovalRequestFormFromTrader(self, item: ApprovalRequestFormFromTrader) -> ApprovalRequestModel:
         item = ApprovalRequestModel(
+            email = item.email,
             instrument_name = item.instrument_name,
-            currency = item.currency,
+            settlement_ccy = item.settlement_ccy,
+            trade_ccy = item.trading_ccy,
             country = item.country,
             exchange_name = item.exchange_name,
             department = item.department,

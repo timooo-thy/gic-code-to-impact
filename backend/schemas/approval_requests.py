@@ -9,8 +9,19 @@ class ApprovalRequestFormFromTrader(BaseModel):
     exchange_name: str
     department: str
 
+
 class CreateApprovalRequestResponseBody(BaseModel):
     id: int
+
+
+class GetRequest(BaseModel):
+    id: int
+    instrument_name: str
+    currency: str
+    country: str
+    exchange_name: str
+    department: str
+
 
 
 class ApprovalRequest(BaseModel):

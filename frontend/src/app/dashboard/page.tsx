@@ -46,6 +46,23 @@ export default function Dashboard() {
     InstrumentGroupParties[]
   >([]);
 
+  const fetchCounterPartyLimits = async () => {
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_FASTAPI_URL +
+        "/approved_instruments/counterparty/sum/"
+    );
+    if (!response.ok) {
+      console.log("Error fetching instrument group limits");
+    }
+
+    const counterPartyLimits = (await response.json()) as CounterPartyLimit[];
+    setCounterPartyLimits(counterPartyLimits);
+  };
+
+  useEffect(() => {
+    fetchCounterPartyLimits();
+  }, []);
+
   useEffect(() => {
     const token = localStorage.getItem("jwt_token");
     if (!token) {
@@ -55,11 +72,6 @@ export default function Dashboard() {
     const handleUpdates = (payload: any) => {
       const newInstrumentGroupParty = payload.new as InstrumentGroupParties;
 
-      const difference =
-        instrumentGroupParties.filter(
-          (party) => party.counterparty === newInstrumentGroupParty.counterparty
-        )[0]?.available_limit - newInstrumentGroupParty.available_limit;
-
       setInstrumentGroupParties((prev) => [
         newInstrumentGroupParty,
         ...prev.filter(
@@ -67,20 +79,19 @@ export default function Dashboard() {
         ),
       ]);
 
-      setCounterPartyLimits((prev) => {
-        const updatedCounterPartyLimits = prev.map((limit) => {
-          if (
-            limit.instrument_group === newInstrumentGroupParty.instrument_group
-          ) {
-            return {
-              ...limit,
-              available_limit: difference,
-            };
-          }
-          return limit;
-        });
-        return updatedCounterPartyLimits;
+      setInstrumentGroupParties((prev) => {
+        const updatedParties = prev.map((party) =>
+          party.counterparty === newInstrumentGroupParty.counterparty
+            ? newInstrumentGroupParty
+            : party
+        );
+
+        return updatedParties.sort((a, b) =>
+          a.counterparty.localeCompare(b.counterparty)
+        );
       });
+
+      fetchCounterPartyLimits();
     };
 
     const channel = supabase
@@ -96,23 +107,6 @@ export default function Dashboard() {
       supabase.removeChannel(channel);
     };
   }, [router]);
-
-  useEffect(() => {
-    const fetchCounterPartyLimits = async () => {
-      const response = await fetch(
-        process.env.NEXT_PUBLIC_FASTAPI_URL +
-          "/approved_instruments/counterparty/sum/"
-      );
-      if (!response.ok) {
-        console.log("Error fetching instrument group limits");
-      }
-
-      const counterPartyLimits = (await response.json()) as CounterPartyLimit[];
-      setCounterPartyLimits(counterPartyLimits);
-    };
-
-    fetchCounterPartyLimits();
-  }, []);
 
   useEffect(() => {
     const fetchInstrumentGroupParties = async () => {

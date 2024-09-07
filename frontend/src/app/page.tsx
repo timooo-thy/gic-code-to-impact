@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Input } from '@/components/ui/input';
-import CreatableSelect from 'react-select/creatable'
+import CreatableSelect from 'react-select/creatable';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -236,28 +236,24 @@ export default function Home() {
 
   const [v5, setV5] = useState('');
   const [v5Open, setV5Open] = useState(false);
-  
+
   const [v6, setV6] = useState('');
   const [v6Open, setV6Open] = useState(false);
-  
+
   const [v7, setV7] = useState('');
   const [v7Open, setV7Open] = useState(false);
-  
+
   const [v8, setV8] = useState('');
   const [v8Open, setV8Open] = useState(false);
-  
+
   const [v9, setV9] = useState('');
   const [v9Open, setV9Open] = useState(false);
-  
+
   const [v10, setV10] = useState('');
   const [v10Open, setV10Open] = useState(false);
-  
+
   const [v11, setV11] = useState('');
   const [v11Open, setV11Open] = useState(false);
-
-
-
-
 
   const {
     data: instrumentGroup,
@@ -451,9 +447,13 @@ export default function Home() {
                   </Command>
                 </PopoverContent>
               </Popover> */}
-              <CreatableSelect isClearable options={instrumentsFormData} onInputSelect={(val) => {
-                setValue(val);
-              }}/>
+              <CreatableSelect
+                isClearable
+                options={instrumentsFormData}
+                onInputSelect={val => {
+                  setValue(val);
+                }}
+              />
             </div>
 
             <div className='space-y-2 flex flex-col'>
@@ -813,8 +813,6 @@ export default function Home() {
                       </Select>
                     </div>
 
-
-
                     {/* THIS IS V5...... */}
                     <div className='space-y-2 flex flex-col'>
                       <label
@@ -823,10 +821,14 @@ export default function Home() {
                       >
                         Instrument
                       </label>
-                      <CreatableSelect isClearable options={instrumentsFormData} onInputChange={(value) => {
-                        setV5(value);
-                      }}/>
-{/* <Popover open={v5Open} onOpenChange={setV5Open}>
+                      <CreatableSelect
+                        isClearable
+                        options={instrumentsFormData}
+                        onInputChange={value => {
+                          setV5(value);
+                        }}
+                      />
+                      {/* <Popover open={v5Open} onOpenChange={setV5Open}>
                         <PopoverTrigger asChild>
                           <Button
                             variant='outline'
@@ -886,10 +888,7 @@ export default function Home() {
                       >
                         Settlement
                       </label>
-                      <Popover
-                        open={v6Open}
-                        onOpenChange={setV6Open}
-                      >
+                      <Popover open={v6Open} onOpenChange={setV6Open}>
                         <PopoverTrigger asChild>
                           <Button
                             variant='outline'
@@ -947,10 +946,7 @@ export default function Home() {
                       >
                         Trading
                       </label>
-                      <Popover
-                        open={v7Open}
-                        onOpenChange={setV7Open}
-                      >
+                      <Popover open={v7Open} onOpenChange={setV7Open}>
                         <PopoverTrigger asChild>
                           <Button
                             variant='outline'
@@ -1066,10 +1062,7 @@ export default function Home() {
                       >
                         Exchange
                       </label>
-                      <Popover
-                        open={v9Open}
-                        onOpenChange={setV9Open}
-                      >
+                      <Popover open={v9Open} onOpenChange={setV9Open}>
                         <PopoverTrigger asChild>
                           <Button
                             variant='outline'

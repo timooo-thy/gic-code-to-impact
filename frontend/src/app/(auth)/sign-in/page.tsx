@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -14,22 +14,52 @@ import {
 } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { signInSchema } from "@/lib/schemas";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [signInObject, setSignInObject] = useState({
+    email: "",
+    password: "",
+  });
   const [error, setError] = useState("");
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_token");
+    if (token) {
+      router.push("/dashboard");
+    }
+  }, [router]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
-    if (!email || !password) {
-      setError("Please fill in all fields");
+    const validatedSignInObject = signInSchema.safeParse(signInObject);
+    if (!validatedSignInObject.success) {
+      setError(validatedSignInObject.error.errors[0].message);
+      return;
+    }
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_FASTAPI_URL + "/users/signin",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(validatedSignInObject.data),
+      }
+    );
+    const data = await response.json();
+    if (data && data.detail) {
+      setError(data.detail.error);
       return;
     }
 
-    console.log("Sign in attempt with:", { email, password });
+    localStorage.setItem("jwt_token", data.access_token);
+
+    router.push("/dashboard");
   };
 
   return (
@@ -52,9 +82,13 @@ export default function SignIn() {
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
+                  value={signInObject.email}
+                  onChange={(e) =>
+                    setSignInObject({
+                      ...signInObject,
+                      email: e.target.value,
+                    })
+                  }
                 />
               </div>
               <div className="space-y-2">
@@ -62,9 +96,13 @@ export default function SignIn() {
                 <Input
                   id="password"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
+                  value={signInObject.password}
+                  onChange={(e) =>
+                    setSignInObject({
+                      ...signInObject,
+                      password: e.target.value,
+                    })
+                  }
                 />
               </div>
               {error && (

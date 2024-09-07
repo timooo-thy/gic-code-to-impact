@@ -12,13 +12,13 @@ router = APIRouter(
 )
 
 
-@router.post("/approval-request", response_model=CreateApprovalRequestResponseBody)
+@router.post("/", response_model=CreateApprovalRequestResponseBody)
 async def signup(req_item: ApprovalRequestFormFromTrader, db: get_db = Depends()):
     item = ApprovalRequestService(db).createApprovalRequestFormFromTrader(req_item)
     return handle_result(item)
 
 
-@router.post("/get-approval-requests", response_model=list[GetRequest])
+@router.post("/", response_model=list[GetRequest])
 async def get_approval_requests(db: get_db = Depends()):
     item = ApprovalRequestService(db).getApprovalRequests()
     return handle_result(item)

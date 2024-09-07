@@ -18,3 +18,8 @@ interface Instrument {
     instrument: string;
     trade_ccy: string;
 }
+
+interface KeyValuePair {
+    label: string;
+    value: string;
+}

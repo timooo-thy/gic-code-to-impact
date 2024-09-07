@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/popover";
 import Navbar from "@/components/Navbar";
 import { useGetInstruments } from "@/hooks/home";
+import { count } from "console";
 
 const frameworks = [
   {
@@ -259,9 +260,15 @@ export default function Home() {
     isExchangeError ||
     isTradeCcyError ||
     isSettlementCcyError
+    || !instrumentGroup 
+    || !instruments
   ) {
     // TODO: loading
     console.log("loading!");
+
+    return <div>
+      Loading...
+    </div>
   }
 
   console.log("instrumentGroup:", instrumentGroup);
@@ -270,35 +277,54 @@ export default function Home() {
   console.log("exchange:", exchange);
   console.log("tradeCcy:", tradeCcy);
   console.log("settlementCcy:", settlementCcy);
+  
+  const instrumentsFormData: KeyValuePair[] = instruments.map((item: string) => ({
+    label: item,
+    value: item
+  }));
 
+  const settlementFormData: KeyValuePair[] = settlementCcy.map((item: string) => ({
+    label: item,
+    value: item
+  }));
+
+  const tradingFormData: KeyValuePair[] = tradeCcy.map((item: string) => ({
+    label: item,
+    value: item
+  }));
+
+  const countryFormData: KeyValuePair[] = riskCountry.map((item: string) => ({
+    label: item,
+    value: item
+  }));
 
   return (
-    <div className="container mx-auto p-6">
+    <div className='container mx-auto p-6'>
       <Navbar />
-      <Card className="mb-6">
+      <Card className='mb-6'>
         <CardHeader>
           <CardTitle>Search Approved Instruments</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
-            <div className="space-y-2">
-              <label htmlFor="instrumentGroup" className="text-sm font-medium">
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
+            <div className='space-y-2'>
+              <label htmlFor='instrumentGroup' className='text-sm font-medium'>
                 Instrument Group
               </label>
               <Select
-                onValueChange={(value) =>
+                onValueChange={value =>
                   setSearchParams({
                     ...searchParams,
                     instrumentGroup: value,
-                    instrument: "",
+                    instrument: '',
                   })
                 }
               >
-                <SelectTrigger id="instrumentGroup">
-                  <SelectValue placeholder="Select Instrument Group" />
+                <SelectTrigger id='instrumentGroup'>
+                  <SelectValue placeholder='Select Instrument Group' />
                 </SelectTrigger>
                 <SelectContent>
-                  {instrumentGroups.map((group) => (
+                  {instrumentGroup.map(group => (
                     <SelectItem key={group} value={group}>
                       {group}
                     </SelectItem>
@@ -306,49 +332,48 @@ export default function Home() {
                 </SelectContent>
               </Select>
             </div>
-            <div className="space-y-2 flex flex-col">
-              <label htmlFor="instrument" className="text-sm font-medium">
+            <div className='space-y-2 flex flex-col'>
+              <label htmlFor='instrument' className='text-sm font-medium'>
                 Instrument
               </label>
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
-                    variant="outline"
-                    role="combobox"
+                    variant='outline'
+                    role='combobox'
                     aria-expanded={open}
-                    className="w-full justify-between"
+                    className='w-full justify-between'
                   >
                     {value
-                      ? frameworks.find(
-                          (framework) => framework.value === value
-                        )?.label
-                      : "Select Instrument..."}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      ? instrumentsFormData.find(framework => framework.value === value)
+                          ?.label
+                      : 'Select Instrument...'}
+                    <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[380px] p-0">
+                <PopoverContent className='w-[380px] p-0'>
                   <Command>
-                    <CommandInput placeholder="Search Instrument..." />
+                    <CommandInput placeholder='Search Instrument...' />
                     <CommandList>
                       <CommandEmpty>No instrument found.</CommandEmpty>
                       <CommandGroup>
-                        {frameworks.map((framework) => (
+                        {instrumentsFormData.map(framework => (
                           <CommandItem
                             key={framework.value}
                             value={framework.value}
-                            onSelect={(currentValue) => {
+                            onSelect={currentValue => {
                               setValue(
-                                currentValue === value ? "" : currentValue
+                                currentValue === value ? '' : currentValue
                               );
                               setOpen(false);
                             }}
                           >
                             <Check
                               className={cn(
-                                "mr-2 h-4 w-4",
+                                'mr-2 h-4 w-4',
                                 value === framework.value
-                                  ? "opacity-100"
-                                  : "opacity-0"
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
                               )}
                             />
                             {framework.label}
@@ -360,18 +385,18 @@ export default function Home() {
                 </PopoverContent>
               </Popover>
             </div>
-            <div className="space-y-2">
+            <div className='space-y-2'>
               <label
-                htmlFor="settlementCurrency"
-                className="text-sm font-medium"
+                htmlFor='settlementCurrency'
+                className='text-sm font-medium'
               >
                 Settlement Currency
               </label>
               <Input
-                id="settlementCurrency"
-                placeholder="Settlement Currency"
+                id='settlementCurrency'
+                placeholder='Settlement Currency'
                 value={searchParams.settlementCurrency}
-                onChange={(e) =>
+                onChange={e =>
                   setSearchParams({
                     ...searchParams,
                     settlementCurrency: e.target.value,
@@ -379,15 +404,15 @@ export default function Home() {
                 }
               />
             </div>
-            <div className="space-y-2">
-              <label htmlFor="tradeCurrency" className="text-sm font-medium">
+            <div className='space-y-2'>
+              <label htmlFor='tradeCurrency' className='text-sm font-medium'>
                 Trade Currency
               </label>
               <Input
-                id="tradeCurrency"
-                placeholder="Trade Currency"
+                id='tradeCurrency'
+                placeholder='Trade Currency'
                 value={searchParams.tradeCurrency}
-                onChange={(e) =>
+                onChange={e =>
                   setSearchParams({
                     ...searchParams,
                     tradeCurrency: e.target.value,
@@ -395,34 +420,34 @@ export default function Home() {
                 }
               />
             </div>
-            <div className="space-y-2">
-              <label htmlFor="country" className="text-sm font-medium">
+            <div className='space-y-2'>
+              <label htmlFor='country' className='text-sm font-medium'>
                 Country
               </label>
               <Input
-                id="country"
-                placeholder="Country"
+                id='country'
+                placeholder='Country'
                 value={searchParams.country}
-                onChange={(e) =>
+                onChange={e =>
                   setSearchParams({ ...searchParams, country: e.target.value })
                 }
               />
             </div>
-            <div className="space-y-2">
-              <label htmlFor="exchange" className="text-sm font-medium">
+            <div className='space-y-2'>
+              <label htmlFor='exchange' className='text-sm font-medium'>
                 Exchange
               </label>
               <Input
-                id="exchange"
-                placeholder="Exchange"
+                id='exchange'
+                placeholder='Exchange'
                 value={searchParams.exchange}
-                onChange={(e) =>
+                onChange={e =>
                   setSearchParams({ ...searchParams, exchange: e.target.value })
                 }
               />
             </div>
           </div>
-          <Button onClick={handleSearch} className="w-full">
+          <Button onClick={handleSearch} className='w-full'>
             Search
           </Button>
         </CardContent>
@@ -430,27 +455,27 @@ export default function Home() {
 
       {hasSearched ? (
         <>
-          <Button onClick={handleBack} className="mb-4">
-            <ArrowLeft className="mr-2 h-4 w-4" /> Back to Dashboard
+          <Button onClick={handleBack} className='mb-4'>
+            <ArrowLeft className='mr-2 h-4 w-4' /> Back to Dashboard
           </Button>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
             {filteredInstruments.length > 0 ? (
-              filteredInstruments.map((instrument) => (
+              filteredInstruments.map(instrument => (
                 <Card key={instrument.id}>
                   <CardHeader>
                     <CardTitle>{instrument.name}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <p>
-                      <strong>Instrument Group:</strong>{" "}
+                      <strong>Instrument Group:</strong>{' '}
                       {instrument.instrumentGroup}
                     </p>
                     <p>
-                      <strong>Settlement Currency:</strong>{" "}
+                      <strong>Settlement Currency:</strong>{' '}
                       {instrument.settlementCurrency}
                     </p>
                     <p>
-                      <strong>Trade Currency:</strong>{" "}
+                      <strong>Trade Currency:</strong>{' '}
                       {instrument.tradeCurrency}
                     </p>
                     <p>
@@ -459,7 +484,7 @@ export default function Home() {
                     <p>
                       <strong>Exchange:</strong> {instrument.exchange}
                     </p>
-                    <div className="space-y-2 flex flex-col">
+                    <div className='space-y-2 flex flex-col'>
                       <p>
                         <strong>CounterParty: </strong>
                       </p>
@@ -469,35 +494,35 @@ export default function Home() {
                       >
                         <PopoverTrigger asChild>
                           <Button
-                            variant="outline"
-                            role="combobox"
+                            variant='outline'
+                            role='combobox'
                             aria-expanded={openCounterParty}
-                            className="w-full justify-between"
+                            className='w-full justify-between'
                           >
                             {value
                               ? frameworks.find(
-                                  (framework) => framework.value === value
+                                  framework => framework.value === value
                                 )?.label
-                              : "Select CounterParty..."}
-                            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                              : 'Select CounterParty...'}
+                            <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                           </Button>
                         </PopoverTrigger>
-                        <PopoverContent className="w-[380px] p-0">
+                        <PopoverContent className='w-[380px] p-0'>
                           <Command>
-                            <CommandInput placeholder="Search CounterParty..." />
+                            <CommandInput placeholder='Search CounterParty...' />
                             <CommandList>
                               <CommandEmpty>
                                 No CounterParty found.
                               </CommandEmpty>
                               <CommandGroup>
-                                {frameworks.map((framework) => (
+                                {frameworks.map(framework => (
                                   <CommandItem
                                     key={framework.value}
                                     value={framework.value}
-                                    onSelect={(currentValue) => {
+                                    onSelect={currentValue => {
                                       setValue(
                                         currentValue === value
-                                          ? ""
+                                          ? ''
                                           : currentValue
                                       );
                                       setOpen(false);
@@ -505,10 +530,10 @@ export default function Home() {
                                   >
                                     <Check
                                       className={cn(
-                                        "mr-2 h-4 w-4",
+                                        'mr-2 h-4 w-4',
                                         value === framework.value
-                                          ? "opacity-100"
-                                          : "opacity-0"
+                                          ? 'opacity-100'
+                                          : 'opacity-0'
                                       )}
                                     />
                                     {framework.label}
@@ -524,7 +549,7 @@ export default function Home() {
                   <CardFooter>
                     <Button
                       onClick={() => handleTrade(instrument.id)}
-                      className="w-full"
+                      className='w-full'
                     >
                       Trade
                     </Button>
@@ -532,38 +557,187 @@ export default function Home() {
                 </Card>
               ))
             ) : (
-              <Card className="col-span-full">
+              <Card className='mb-6'>
                 <CardHeader>
-                  <CardTitle>No Results Found</CardTitle>
+                  <CardTitle>Raise Approval Request</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <p>
-                    We couldn't find any instruments matching your search
-                    criteria.
-                  </p>
-                </CardContent>
-                <CardFooter>
-                  <Button
-                    onClick={handleSubmitNewRequest}
-                    variant="outline"
-                    className="w-full"
-                  >
-                    Submit New Request to Approval Team
+                  <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
+                    <div className='space-y-2'>
+                      <label
+                        htmlFor='instrumentGroup'
+                        className='text-sm font-medium'
+                      >
+                        Instrument Group
+                      </label>
+                      <Select
+                        onValueChange={value =>
+                          setSearchParams({
+                            ...searchParams,
+                            instrumentGroup: value,
+                            instrument: '',
+                          })
+                        }
+                      >
+                        <SelectTrigger id='instrumentGroup'>
+                          <SelectValue placeholder='Select Instrument Group' />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {instrumentGroups.map(group => (
+                            <SelectItem key={group} value={group}>
+                              {group}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className='space-y-2 flex flex-col'>
+                      <label
+                        htmlFor='instrument'
+                        className='text-sm font-medium'
+                      >
+                        Instrument
+                      </label>
+                      <Popover open={open} onOpenChange={setOpen}>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant='outline'
+                            role='combobox'
+                            aria-expanded={open}
+                            className='w-full justify-between'
+                          >
+                            {value
+                              ? frameworks.find(
+                                  framework => framework.value === value
+                                )?.label
+                              : 'Select Instrument...'}
+                            <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className='w-[380px] p-0'>
+                          <Command>
+                            <CommandInput placeholder='Search Instrument...' />
+                            <CommandList>
+                              <CommandEmpty>No instrument found.</CommandEmpty>
+                              <CommandGroup>
+                                {frameworks.map(framework => (
+                                  <CommandItem
+                                    key={framework.value}
+                                    value={framework.value}
+                                    onSelect={currentValue => {
+                                      setValue(
+                                        currentValue === value
+                                          ? ''
+                                          : currentValue
+                                      );
+                                      setOpen(false);
+                                    }}
+                                  >
+                                    <Check
+                                      className={cn(
+                                        'mr-2 h-4 w-4',
+                                        value === framework.value
+                                          ? 'opacity-100'
+                                          : 'opacity-0'
+                                      )}
+                                    />
+                                    {framework.label}
+                                  </CommandItem>
+                                ))}
+                              </CommandGroup>
+                            </CommandList>
+                          </Command>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
+                    <div className='space-y-2'>
+                      <label
+                        htmlFor='settlementCurrency'
+                        className='text-sm font-medium'
+                      >
+                        Settlement Currency
+                      </label>
+                      <Input
+                        id='settlementCurrency'
+                        placeholder='Settlement Currency'
+                        value={searchParams.settlementCurrency}
+                        onChange={e =>
+                          setSearchParams({
+                            ...searchParams,
+                            settlementCurrency: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className='space-y-2'>
+                      <label
+                        htmlFor='tradeCurrency'
+                        className='text-sm font-medium'
+                      >
+                        Trade Currency
+                      </label>
+                      <Input
+                        id='tradeCurrency'
+                        placeholder='Trade Currency'
+                        value={searchParams.tradeCurrency}
+                        onChange={e =>
+                          setSearchParams({
+                            ...searchParams,
+                            tradeCurrency: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className='space-y-2'>
+                      <label htmlFor='country' className='text-sm font-medium'>
+                        Country
+                      </label>
+                      <Input
+                        id='country'
+                        placeholder='Country'
+                        value={searchParams.country}
+                        onChange={e =>
+                          setSearchParams({
+                            ...searchParams,
+                            country: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                    <div className='space-y-2'>
+                      <label htmlFor='exchange' className='text-sm font-medium'>
+                        Exchange
+                      </label>
+                      <Input
+                        id='exchange'
+                        placeholder='Exchange'
+                        value={searchParams.exchange}
+                        onChange={e =>
+                          setSearchParams({
+                            ...searchParams,
+                            exchange: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
+                  </div>
+                  <Button onClick={handleSearch} className='w-full'>
+                    Submit Request
                   </Button>
-                </CardFooter>
+                </CardContent>
               </Card>
             )}
           </div>
         </>
       ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
           <Card>
             <CardHeader>
               <CardTitle>Past Trading History</CardTitle>
             </CardHeader>
             <CardContent>
-              {mockPastTrades.map((trade) => (
-                <Card key={trade.id} className="mb-4">
+              {mockPastTrades.map(trade => (
+                <Card key={trade.id} className='mb-4'>
                   <CardHeader>
                     <CardTitle>{trade.name}</CardTitle>
                   </CardHeader>
@@ -590,8 +764,8 @@ export default function Home() {
               <CardTitle>Submitted Requests Status</CardTitle>
             </CardHeader>
             <CardContent>
-              {mockSubmittedRequests.map((request) => (
-                <Card key={request.id} className="mb-4">
+              {mockSubmittedRequests.map(request => (
+                <Card key={request.id} className='mb-4'>
                   <CardHeader>
                     <CardTitle>{request.instrumentName}</CardTitle>
                   </CardHeader>

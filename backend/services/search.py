@@ -2,6 +2,7 @@ from ..services.main import AppService, AppCRUD
 from ..utils.service_result import ServiceResult
 from ..models.instruments import InstrumentModel
 from ..models.limits import LimitModel
+from ..schemas.search import LimitGroupResponse
 from sqlalchemy import func
 
 class SearchService(AppService):
@@ -16,6 +17,10 @@ class SearchService(AppService):
     def getCounterparties(self, instrument_group) -> ServiceResult:
         item = SearchCrud(self.db).getCounterparties(instrument_group)
         return ServiceResult(item)
+
+    def getSumOfLimits(self) -> ServiceResult:
+        items = SearchCrud(self.db).getSumOfLimits()
+        return ServiceResult([item.dict() for item in items])
 
 class SearchCrud(AppCRUD):
     def search(self, instrument_group, instrument, department, risk_country, exchange, trade_ccy, settlement_ccy, limit, offset):
@@ -61,4 +66,14 @@ class SearchCrud(AppCRUD):
 
     def getCounterparties(self, instrument_group):
         return self.db.query(LimitModel).filter(LimitModel.instrument_group == instrument_group).all()
-        
+
+    def getSumOfLimits(self):
+        results = self.db.query(
+            LimitModel.instrument_group,
+            func.sum(LimitModel.available_limit).label('available_limit')
+        ).group_by(LimitModel.instrument_group).all()
+        limit_groups = []
+        for result in results:
+            limit_groups.append(LimitGroupResponse(instrument_group=result[0],
+                                                   available_limit=int(result[1]) if result[1] is not None else 0))
+        return limit_groups

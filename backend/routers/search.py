@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, Query
 from ..config.database import get_db
 from ..services.search import SearchService
+from ..schemas.search import LimitGroupResponse
 from ..utils.service_result import handle_result
 from typing import Optional
 from enum import Enum
@@ -58,6 +59,12 @@ async def get_counterparties_for_instrument_group(
     instrument_group: str, 
     db: get_db = Depends()):
     item = SearchService(db).getCounterparties(instrument_group)
+    return handle_result(item)
+
+
+@router.get("counterparty/sum")
+async def get_sum_of_limits(db: get_db = Depends()):
+    item = SearchService(db).getSumOfLimits()
     return handle_result(item)
 
 # @router.get("/") 

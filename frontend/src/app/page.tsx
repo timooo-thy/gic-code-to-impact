@@ -34,6 +34,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import Navbar from "@/components/Navbar";
+import { useGetInstruments } from "@/hooks/home";
 
 const frameworks = [
   {
@@ -237,6 +238,39 @@ export default function Home() {
   const [open, setOpen] = useState(false);
   const [openCounterParty, setOpenCounterParty] = useState(false);
   const [value, setValue] = useState("");
+
+  const { data: instrumentGroup, isPending: isInstrumentGroupPending, isError: isInstrumentGroupError } = useGetInstruments("instrument_group");
+  const { data: instruments, isPending: isInstrumentsPending, isError: isInstrumentsError } = useGetInstruments("instrument");
+  const { data: riskCountry, isPending: isRiskCountryPending, isError: isRiskCountryError } = useGetInstruments("risk_country");
+  const { data: exchange, isPending: isExchangePending, isError: isExchangeError } = useGetInstruments("exchange");
+  const { data: tradeCcy, isPending: isTradeCcyPending, isError: isTradeCcyError } = useGetInstruments("trade_ccy");
+  const { data: settlementCcy, isPending: isSettlementCcyPending, isError: isSettlementCcyError } = useGetInstruments("settlement_ccy");
+  
+  if (
+    isInstrumentGroupPending ||
+    isInstrumentsPending ||
+    isRiskCountryPending ||
+    isExchangePending ||
+    isTradeCcyPending ||
+    isSettlementCcyPending ||
+    isInstrumentGroupError ||
+    isInstrumentsError ||
+    isRiskCountryError ||
+    isExchangeError ||
+    isTradeCcyError ||
+    isSettlementCcyError
+  ) {
+    // TODO: loading
+    console.log("loading!");
+  }
+
+  console.log("instrumentGroup:", instrumentGroup);
+  console.log("instruments:", instruments);
+  console.log("riskCountry:", riskCountry);
+  console.log("exchange:", exchange);
+  console.log("tradeCcy:", tradeCcy);
+  console.log("settlementCcy:", settlementCcy);
+
 
   return (
     <div className="container mx-auto p-6">

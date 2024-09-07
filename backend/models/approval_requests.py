@@ -8,8 +8,8 @@ from ..config.database import Base
 
 class ApprovalRequestModel(Base):
     __tablename__ = "requests"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    id = Column(Integer, autoincrement=True)
+    email = Column(String, primary_key=True)
     created_at = Column(Time, default=datetime.utcnow)
     instrument_name = Column(String)
     currency = Column(String)

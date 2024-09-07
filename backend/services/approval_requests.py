@@ -1,5 +1,5 @@
 from ..models.approval_requests import ApprovalRequestModel
-from ..schemas.approval_requests import ApprovalRequestFormFromTrader, GetRequest
+from ..schemas.approval_requests import ApprovalRequestFormFromTrader, GetNonApprovedRequest, GetAllRequest
 from ..services.main import AppService, AppCRUD
 from ..utils.service_result import ServiceResult
 from ..utils.app_exceptions import AppException
@@ -13,6 +13,10 @@ class ApprovalRequestService(AppService):
 
     def getApprovalRequests(self) -> ServiceResult:
         item = ApprovalRequestCRUD(self.db).getApprovalRequests()
+        return ServiceResult(item)
+
+    def getAllRequests(self) -> ServiceResult:
+        item = ApprovalRequestCRUD(self.db).getAllRequests()
         return ServiceResult(item)
 
     def approveRequest(self, id: int) -> ServiceResult:
@@ -38,8 +42,12 @@ class ApprovalRequestCRUD(AppCRUD):
         self.db.refresh(item)
         return item
 
-    def getApprovalRequests(self) -> list[GetRequest]:
+    def getApprovalRequests(self) -> list[GetNonApprovedRequest]:
         item = self.db.query(ApprovalRequestModel).filter(ApprovalRequestModel.approved == False).all()
+        return item
+
+    def getAllRequests(self) -> list[GetAllRequest]:
+        item = self.db.query(ApprovalRequestModel).all()
         return item
 
     def approveRequest(self, id: int) -> bool:

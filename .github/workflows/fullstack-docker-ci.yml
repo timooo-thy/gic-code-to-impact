@@ -1,0 +1,150 @@
+name: Full Stack CI/CD
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches:
+      - "**"
+
+jobs:
+  setup-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "21"
+
+      - name: Cache npm dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.OS }}-node-${{ hashFiles('**/frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.OS }}-node-
+
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
+          npm ci
+
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.OS }}-node-modules-${{ hashFiles('**/frontend/package-lock.json') }}
+
+  build-frontend:
+    needs: setup-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "21"
+
+      - name: Restore node_modules
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.OS }}-node-modules-${{ hashFiles('**/frontend/package-lock.json') }}
+
+      - name: Build Next.js App
+        run: |
+          cd frontend
+          npm run build
+        # env:
+
+  test-frontend:
+    needs: setup-frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "21"
+
+      - name: Restore node_modules
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.OS }}-node-modules-${{ hashFiles('**/frontend/package-lock.json') }}
+
+      - name: Run Frontend Linter
+        run: |
+          cd frontend
+          npm run lint
+
+      - name: Run Frontend Tests
+        run: |
+          cd frontend
+          npm run test
+
+  setup-and-test-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12.2"
+
+      - name: Install Backend Dependencies
+        run: |
+          cd backend
+          pip install -r requirements.txt
+
+      - name: Run Backend Tests
+        run: |
+          cd backend
+          # python -m pytest
+
+  docker-compose:
+    needs: [build-frontend, test-frontend, setup-and-test-backend]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Create .env file
+        run: |
+          echo "BACKEND_ENV >> .env
+
+      - name: Build and run with Docker Compose
+        run: |
+          docker compose --env-file .env up -d
+
+      - name: Wait for services to start
+        run: sleep 15s
+
+      - name: Test Frontend
+        run: |
+          if curl -sSf http://localhost:3000 > /dev/null; then
+            echo "Frontend is running and accessible"
+          else
+            echo "Frontend test failed"
+            exit 1
+          fi
+
+      - name: Test Backend
+        run: |
+          if curl -sSf http://localhost:8000 > /dev/null; then
+            echo "Backend is running and accessible"
+          else
+            echo "Backend test failed"
+            exit 1
+          fi
+
+      - name: Stop Docker Compose
+        run: docker compose down

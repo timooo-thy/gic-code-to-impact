@@ -7,9 +7,10 @@ import {
   useQueryClient,
   QueryClient,
   QueryClientProvider,
-} from '@tanstack/react-query'
+} from "@tanstack/react-query";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Provider } from "@/Provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,14 +28,15 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Provider>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+            <Toaster richColors />
+          </ThemeProvider>
         </Provider>
       </body>
     </html>

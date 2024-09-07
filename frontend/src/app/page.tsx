@@ -17,7 +17,7 @@ import {
   CardTitle,
   CardFooter,
 } from '@/components/ui/card';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ListRestartIcon } from 'lucide-react';
 import { Check, ChevronsUpDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import {
@@ -328,7 +328,22 @@ export default function Home() {
       <Navbar />
       <Card className='mb-6'>
         <CardHeader>
-          <CardTitle>Search Approved Instruments</CardTitle>
+          <CardTitle>
+            <div className='flex justify-between'>
+              <p>Search Approved Instruments</p>
+              <ListRestartIcon
+                className='cursor-pointer'
+                onClick={() => {
+                  setValue('');
+                  setV1('');
+                  setV2('');
+                  setV3('');
+                  setV4('');
+                  setV5('');
+                }}
+              />
+            </div>
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>

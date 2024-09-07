@@ -9,6 +9,7 @@ class UserModel(Base):
     email = Column(String, unique=True)
     password = Column(String)
     role = Column(String)
+    department = Column(String)
 
     __table_args__ = (
         UniqueConstraint('email', name='uix_2'),

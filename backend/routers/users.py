@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from fastapi.security import OAuth2PasswordRequestForm
-from ..schemas.users import UserRegisterResponse, UserRegisterRequest, UserToken, UserSignInRequest
+from ..schemas.users import UserRegisterRequest, UserToken, UserSignInRequest
 from ..config.database import get_db
 from ..services.users import UserService
 from ..utils.service_result import handle_result
@@ -11,9 +11,11 @@ router = APIRouter(
 )
 
 
-@router.post("/signup", response_model=UserRegisterResponse)
-async def signup(item: UserRegisterRequest, db: get_db = Depends()):
-    item = UserService(db).signup(item)
+@router.post("/signup", response_model=UserToken)
+async def signup(req_item: UserRegisterRequest, db: get_db = Depends()):
+    item = UserService(db).signup(req_item)
+    if item.success:
+        item = UserService(db).authenticate_user(req_item.email, req_item.password)
     return handle_result(item)
 
 

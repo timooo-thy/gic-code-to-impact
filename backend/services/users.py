@@ -14,7 +14,7 @@ class UserService(AppService):
             return ServiceResult(AppException.InvalidItem({"error": "password and confirm password don't match"}))
         item = UserCRUD(self.db).signup(item)
         if not item:
-            return ServiceResult(AppException.AddItem())
+            return ServiceResult(AppException.AddItem({"error": "Failed"}))
         return ServiceResult(item)
 
     def authenticate_user(self, email: str, password: str) -> ServiceResult:
@@ -29,8 +29,12 @@ class UserService(AppService):
         )
         return ServiceResult(user_token)
 
+
 class UserCRUD(AppCRUD):
     def signup(self, item: UserRegisterRequest) -> UserModel:
+        user = self.db.query(UserModel).filter(UserModel.email == item.email).first()
+        if user:
+            return None
         if item.role is None:
             item.role = "trader"
         item = UserModel(email=item.email,
@@ -41,7 +45,7 @@ class UserCRUD(AppCRUD):
         self.db.refresh(item)
         return item
 
-    def authenticate_user(self, email: str, password: str) -> UserModel | None:
+    def authenticate_user(self, email: str, password: str) -> UserModel:
         user = self.db.query(UserModel).filter(UserModel.email == email).first()
         if user:
             if verify_password(password, user.password):

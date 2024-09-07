@@ -62,7 +62,7 @@ async def get_counterparties_for_instrument_group(
     return handle_result(item)
 
 
-@router.get("counterparty/sum")
+@router.get("/counterparty/sum")
 async def get_sum_of_limits(db: get_db = Depends()):
     item = SearchService(db).getSumOfLimits()
     return handle_result(item)

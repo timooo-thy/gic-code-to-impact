@@ -357,7 +357,7 @@ export default function Home() {
                             value={framework.value}
                             onSelect={currentValue => {
                               setValue(
-                                currentValue
+                                currentValue == value ? '' : currentValue
                               );
                               setOpen(false);
                             }}
@@ -412,7 +412,9 @@ export default function Home() {
                             key={framework.value}
                             value={framework.value}
                             onSelect={currentValue => {
-                              setV1(currentValue)
+                              setV1(
+                                currentValue == v1 ? '' : currentValue
+                              )
                               setSettlementOpen(false);
                             }}
                           >
@@ -468,7 +470,9 @@ export default function Home() {
                             key={framework.value}
                             value={framework.value}
                             onSelect={currentValue => {
-                              setV2(currentValue)
+                              setV2(
+                                currentValue == v2 ? '' : currentValue
+                              )
                               setTradingOpen(false);
                             }}
                           >
@@ -521,7 +525,9 @@ export default function Home() {
                             key={framework.value}
                             value={framework.value}
                             onSelect={currentValue => {
-                              setV3(currentValue);
+                              setV3(
+                                currentValue == v3 ? '' : currentValue
+                              );
                               setCountryOpen(false);
                             }}
                           >
@@ -579,7 +585,9 @@ export default function Home() {
                             key={framework.value}
                             value={framework.value}
                             onSelect={currentValue => {
-                              setV4(currentValue);
+                              setV4(
+                                currentValue == v4 ? '' : currentValue
+                              );
                               setExchangeOpen(false);
                             }}
                           >

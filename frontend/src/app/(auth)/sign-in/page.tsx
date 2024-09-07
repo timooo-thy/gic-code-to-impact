@@ -14,22 +14,48 @@ import {
 } from "@/components/ui/card";
 import { AlertCircle } from "lucide-react";
 import Link from "next/link";
+import { signInSchema } from "@/lib/schemas";
 
 export default function SignIn() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [signInObject, setSignInObject] = useState({
+    username: "",
+    password: "",
+  });
   const [error, setError] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    console.log(signInObject);
 
-    if (!email || !password) {
-      setError("Please fill in all fields");
+    const validatedSignInObject = signInSchema.safeParse(signInObject);
+    if (!validatedSignInObject.success) {
+      setError(validatedSignInObject.error.errors[0].message);
       return;
     }
 
-    console.log("Sign in attempt with:", { email, password });
+    const oauthSignInObject = {
+      ...validatedSignInObject.data,
+      grant_type:
+        "grant_type=password&username=ryxeros%40gma&password=asdasd&scope=&client_id=string&client_secret=string",
+    };
+    const response = await fetch(
+      process.env.NEXT_PUBLIC_FASTAPI_URL + "/users/signin",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(oauthSignInObject),
+      }
+    );
+    const data = await response.json();
+    console.log(data.detail);
+    if (data && data.detail) {
+      setError(data.detail[0].msg);
+      return;
+    }
+    console.log(data);
   };
 
   return (
@@ -52,8 +78,13 @@ export default function SignIn() {
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  value={signInObject.username}
+                  onChange={(e) =>
+                    setSignInObject({
+                      ...signInObject,
+                      username: e.target.value,
+                    })
+                  }
                   required
                 />
               </div>
@@ -62,8 +93,13 @@ export default function SignIn() {
                 <Input
                   id="password"
                   type="password"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  value={signInObject.password}
+                  onChange={(e) =>
+                    setSignInObject({
+                      ...signInObject,
+                      password: e.target.value,
+                    })
+                  }
                   required
                 />
               </div>

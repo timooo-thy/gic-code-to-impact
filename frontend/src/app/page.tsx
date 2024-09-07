@@ -237,6 +237,7 @@ export default function Home() {
   const [v5, setV5] = useState("");
   const [v5Open, setV5Open] = useState(false);
 
+
   const [v6, setV6] = useState("");
   const [v6Open, setV6Open] = useState(false);
 
@@ -254,7 +255,7 @@ export default function Home() {
 
   const [v11, setV11] = useState("");
   const [v11Open, setV11Open] = useState(false);
-
+  
   const {
     data: instrumentGroup,
     isPending: isInstrumentGroupPending,

@@ -303,6 +303,12 @@ export default function Home() {
     value: item
   }));
 
+
+  const exchangeFormData: KeyValuePair[] = exchange.map((item: string) => ({
+    label: item,
+    value: item
+  }));
+
   return (
     <div className='container mx-auto p-6'>
       <Navbar />
@@ -481,6 +487,121 @@ export default function Home() {
                       <CommandEmpty>No Trading found.</CommandEmpty>
                       <CommandGroup>
                         {tradingFormData.map(framework => (
+                          <CommandItem
+                            key={framework.value}
+                            value={framework.value}
+                            onSelect={currentValue => {
+                              setValue(
+                                currentValue === value ? '' : currentValue
+                              );
+                              setOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                'mr-2 h-4 w-4',
+                                value === framework.value
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
+                              )}
+                            />
+                            {framework.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div> 
+
+
+            <div className='space-y-2 flex flex-col'>
+              <label htmlFor='settlement' className='text-sm font-medium'>
+                Country
+              </label>
+              <Popover open={countryOpen} onOpenChange={setCountryOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant='outline'
+                    role='combobox'
+                    aria-expanded={open}
+                    className='w-full justify-between'
+                  >
+                    {value
+                      ? countryFormData.find(framework => framework.value === value)
+                          ?.label
+                      : 'Select Country...'}
+                    <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className='w-[380px] p-0'>
+                  <Command>
+                    <CommandInput placeholder='Search Country...' />
+                    <CommandList>
+                      <CommandEmpty>No Trading found.</CommandEmpty>
+                      <CommandGroup>
+                        {countryFormData.map(framework => (
+                          <CommandItem
+                            key={framework.value}
+                            value={framework.value}
+                            onSelect={currentValue => {
+                              setValue(
+                                currentValue === value ? '' : currentValue
+                              );
+                              setOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                'mr-2 h-4 w-4',
+                                value === framework.value
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
+                              )}
+                            />
+                            {framework.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div> 
+
+
+
+
+
+
+
+            <div className='space-y-2 flex flex-col'>
+              <label htmlFor='settlement' className='text-sm font-medium'>
+                Exchange
+              </label>
+              <Popover open={exchangeOpen} onOpenChange={setExchangeOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant='outline'
+                    role='combobox'
+                    aria-expanded={open}
+                    className='w-full justify-between'
+                  >
+                    {value
+                      ? exchangeFormData.find(framework => framework.value === value)
+                          ?.label
+                      : 'Select Exchange...'}
+                    <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className='w-[380px] p-0'>
+                  <Command>
+                    <CommandInput placeholder='Search Exchange...' />
+                    <CommandList>
+                      <CommandEmpty>No Exchange found.</CommandEmpty>
+                      <CommandGroup>
+                        {exchangeFormData.map(framework => (
                           <CommandItem
                             key={framework.value}
                             value={framework.value}

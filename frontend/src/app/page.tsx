@@ -243,7 +243,15 @@ export default function Home() {
   const [countryOpen, setCountryOpen] = useState(false);
 
   const [openCounterParty, setOpenCounterParty] = useState(false);
+
+
   const [value, setValue] = useState("");
+
+  const [v1, setV1] = useState("");
+  const [v2, setV2] = useState("");
+  const [v3, setV3] = useState("");
+  const [v4, setV4] = useState("");
+  const [v5, setV5] = useState("");
 
   const { data: instrumentGroup, isPending: isInstrumentGroupPending, isError: isInstrumentGroupError } = useGetInstruments("instrument_group");
   const { data: instruments, isPending: isInstrumentsPending, isError: isInstrumentsError } = useGetInstruments("instrument");
@@ -378,7 +386,7 @@ export default function Home() {
                             value={framework.value}
                             onSelect={currentValue => {
                               setValue(
-                                currentValue === value ? '' : currentValue
+                                currentValue
                               );
                               setOpen(false);
                             }}
@@ -415,8 +423,8 @@ export default function Home() {
                     aria-expanded={open}
                     className='w-full justify-between'
                   >
-                    {value
-                      ? settlementFormData.find(framework => framework.value === value)
+                    {v1
+                      ? settlementFormData.find(framework => framework.value === v1)
                           ?.label
                       : 'Select Settlement...'}
                     <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
@@ -433,16 +441,14 @@ export default function Home() {
                             key={framework.value}
                             value={framework.value}
                             onSelect={currentValue => {
-                              setValue(
-                                currentValue === value ? '' : currentValue
-                              );
-                              setOpen(false);
+                              setV1(currentValue)
+                              setSettlementOpen(false);
                             }}
                           >
                             <Check
                               className={cn(
                                 'mr-2 h-4 w-4',
-                                value === framework.value
+                                v1 === framework.value
                                   ? 'opacity-100'
                                   : 'opacity-0'
                               )}
@@ -473,8 +479,8 @@ export default function Home() {
                     aria-expanded={open}
                     className='w-full justify-between'
                   >
-                    {value
-                      ? tradingFormData.find(framework => framework.value === value)
+                    {v2
+                      ? tradingFormData.find(framework => framework.value === v2)
                           ?.label
                       : 'Select Trading...'}
                     <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
@@ -491,16 +497,14 @@ export default function Home() {
                             key={framework.value}
                             value={framework.value}
                             onSelect={currentValue => {
-                              setValue(
-                                currentValue === value ? '' : currentValue
-                              );
-                              setOpen(false);
+                              setV2(currentValue)
+                              setTradingOpen(false);
                             }}
                           >
                             <Check
                               className={cn(
                                 'mr-2 h-4 w-4',
-                                value === framework.value
+                                v2 === framework.value
                                   ? 'opacity-100'
                                   : 'opacity-0'
                               )}
@@ -528,8 +532,8 @@ export default function Home() {
                     aria-expanded={open}
                     className='w-full justify-between'
                   >
-                    {value
-                      ? countryFormData.find(framework => framework.value === value)
+                    {v3
+                      ? countryFormData.find(framework => framework.value === v3)
                           ?.label
                       : 'Select Country...'}
                     <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
@@ -546,16 +550,14 @@ export default function Home() {
                             key={framework.value}
                             value={framework.value}
                             onSelect={currentValue => {
-                              setValue(
-                                currentValue === value ? '' : currentValue
-                              );
-                              setOpen(false);
+                              setV3(currentValue);
+                              setCountryOpen(false);
                             }}
                           >
                             <Check
                               className={cn(
                                 'mr-2 h-4 w-4',
-                                value === framework.value
+                                v3 === framework.value
                                   ? 'opacity-100'
                                   : 'opacity-0'
                               )}
@@ -588,8 +590,8 @@ export default function Home() {
                     aria-expanded={open}
                     className='w-full justify-between'
                   >
-                    {value
-                      ? exchangeFormData.find(framework => framework.value === value)
+                    {v4
+                      ? exchangeFormData.find(framework => framework.value === v4)
                           ?.label
                       : 'Select Exchange...'}
                     <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
@@ -606,16 +608,14 @@ export default function Home() {
                             key={framework.value}
                             value={framework.value}
                             onSelect={currentValue => {
-                              setValue(
-                                currentValue === value ? '' : currentValue
-                              );
-                              setOpen(false);
+                              setV4(currentValue);
+                              setExchangeOpen(false);
                             }}
                           >
                             <Check
                               className={cn(
                                 'mr-2 h-4 w-4',
-                                value === framework.value
+                                v4 === framework.value
                                   ? 'opacity-100'
                                   : 'opacity-0'
                               )}

@@ -1,12 +1,20 @@
-import React, { useEffect, useMemo, useState } from "react";
-import Navbar from "./Navbar";
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import uFuzzy from "@leeoniya/ufuzzy";
+import { useDebounce } from "@/lib/hooks";
+import { IncomingRequestType } from "@/lib/types";
+import { toast } from "sonner";
+import { supabase } from "@/lib/db";
+import Navbar from "@/components/Navbar";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "./ui/card";
+} from "@/components/ui/card";
+import SearchBar from "@/components/SearchBar";
 import {
   Table,
   TableBody,
@@ -14,17 +22,11 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "./ui/table";
-import SearchBar from "./SearchBar";
-import uFuzzy from "@leeoniya/ufuzzy";
-import { useDebounce } from "@/lib/hooks";
-import { ConfirmationDialog } from "./ConfirmationDialog";
-import { IncomingRequestType } from "@/lib/types";
-import { toast } from "sonner";
-import { supabase } from "@/lib/db";
+} from "@/components/ui/table";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { useRouter } from "next/navigation";
 
-export default function AdminDashboard() {
+export default function ApprovalPage() {
   const [incomingRequests, setIncomingRequests] = useState<
     IncomingRequestType[]
   >([]);
@@ -35,12 +37,20 @@ export default function AdminDashboard() {
     if (!jwtToken) {
       router.push("/sign-in");
     }
+
     const fetchIncomingRequests = async () => {
       const response = await fetch(
-        process.env.NEXT_PUBLIC_FASTAPI_URL + `/approval-request/all`
+        process.env.NEXT_PUBLIC_FASTAPI_URL + `/approval-request/user-requests`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ access_token: jwtToken }),
+        }
       );
       if (!response.ok) {
-        toast.error("Error fetching counterparties");
+        toast.error("Error fetching approvals for user");
       }
 
       const counterPartyLimits =
@@ -48,6 +58,7 @@ export default function AdminDashboard() {
 
       setIncomingRequests(counterPartyLimits);
     };
+
     const handleUpdates = () => {
       toast.info("A new request has been made");
       fetchIncomingRequests();

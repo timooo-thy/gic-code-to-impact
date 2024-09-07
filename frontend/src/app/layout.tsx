@@ -15,7 +15,7 @@ import { Toaster } from "@/components/ui/sonner";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "GIC Code to Impact",
+  title: "GIC SuperTrader",
   description: "Hackathon project for GIC Code to Impact",
 };
 

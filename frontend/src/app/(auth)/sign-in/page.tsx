@@ -71,7 +71,7 @@ export default function SignIn() {
       <Card className="w-[350px]">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
-            Sign in to GIC Trader
+            Sign in to GIC SuperTrader
           </CardTitle>
           <CardDescription className="text-center">
             Enter your email and password to sign in

@@ -1,11 +1,11 @@
 import { z } from "zod";
 
 export const signInSchema = z.object({
-  username: z.string().email(),
-  password: z.string().min(0),
+  email: z.string().email(),
+  password: z.string().min(6, "Password must be at least 6 character"),
 });
 
 export const signUpSchema = z.object({
-  username: z.string().email(),
-  password: z.string().min(0),
+  email: z.string().email(),
+  password: z.string().min(1),
 });

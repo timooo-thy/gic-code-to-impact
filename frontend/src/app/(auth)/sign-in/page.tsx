@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -15,30 +15,32 @@ import {
 import { AlertCircle } from "lucide-react";
 import Link from "next/link";
 import { signInSchema } from "@/lib/schemas";
+import { useRouter } from "next/navigation";
 
 export default function SignIn() {
   const [signInObject, setSignInObject] = useState({
-    username: "",
+    email: "",
     password: "",
   });
   const [error, setError] = useState("");
+  const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("jwt_token");
+    if (token) {
+      router.push("/dashboard");
+    }
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    console.log(signInObject);
 
     const validatedSignInObject = signInSchema.safeParse(signInObject);
     if (!validatedSignInObject.success) {
       setError(validatedSignInObject.error.errors[0].message);
       return;
     }
-
-    const oauthSignInObject = {
-      ...validatedSignInObject.data,
-      grant_type:
-        "grant_type=password&username=ryxeros%40gma&password=asdasd&scope=&client_id=string&client_secret=string",
-    };
     const response = await fetch(
       process.env.NEXT_PUBLIC_FASTAPI_URL + "/users/signin",
       {
@@ -46,16 +48,18 @@ export default function SignIn() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(oauthSignInObject),
+        body: JSON.stringify(validatedSignInObject.data),
       }
     );
     const data = await response.json();
-    console.log(data.detail);
     if (data && data.detail) {
-      setError(data.detail[0].msg);
+      setError(data.detail.error);
       return;
     }
-    console.log(data);
+
+    localStorage.setItem("jwt_token", data.access_token);
+
+    router.push("/dashboard");
   };
 
   return (
@@ -78,14 +82,13 @@ export default function SignIn() {
                   id="email"
                   type="email"
                   placeholder="m@example.com"
-                  value={signInObject.username}
+                  value={signInObject.email}
                   onChange={(e) =>
                     setSignInObject({
                       ...signInObject,
-                      username: e.target.value,
+                      email: e.target.value,
                     })
                   }
-                  required
                 />
               </div>
               <div className="space-y-2">
@@ -100,7 +103,6 @@ export default function SignIn() {
                       password: e.target.value,
                     })
                   }
-                  required
                 />
               </div>
               {error && (

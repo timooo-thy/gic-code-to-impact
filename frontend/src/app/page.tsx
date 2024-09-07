@@ -827,9 +827,9 @@ export default function Home() {
                             aria-expanded={open}
                             className='w-full justify-between'
                           >
-                            {v5
+                            {value
                               ? instrumentsFormData.find(
-                                  framework => framework.value === v5
+                                  framework => framework.value === value
                                 )?.label
                               : 'Select Instrument...'}
                             <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
@@ -890,9 +890,9 @@ export default function Home() {
                             aria-expanded={open}
                             className='w-full justify-between'
                           >
-                            {v6
+                            {v1
                               ? settlementFormData.find(
-                                  framework => framework.value === v6
+                                  framework => framework.value === v1
                                 )?.label
                               : 'Select Settlement...'}
                             <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
@@ -951,9 +951,9 @@ export default function Home() {
                             aria-expanded={open}
                             className='w-full justify-between'
                           >
-                            {v7
+                            {v2
                               ? tradingFormData.find(
-                                  framework => framework.value === v7
+                                  framework => framework.value === v2
                                 )?.label
                               : 'Select Trading...'}
                             <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
@@ -1009,9 +1009,9 @@ export default function Home() {
                             aria-expanded={open}
                             className='w-full justify-between'
                           >
-                            {v8
+                            {v3
                               ? countryFormData.find(
-                                  framework => framework.value === v8
+                                  framework => framework.value === v3
                                 )?.label
                               : 'Select Country...'}
                             <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
@@ -1070,9 +1070,9 @@ export default function Home() {
                             aria-expanded={open}
                             className='w-full justify-between'
                           >
-                            {v9
+                            {v4
                               ? exchangeFormData.find(
-                                  framework => framework.value === v9
+                                  framework => framework.value === v4
                                 )?.label
                               : 'Select Exchange...'}
                             <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />

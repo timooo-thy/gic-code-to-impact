@@ -57,7 +57,13 @@ export default function SignIn() {
       return;
     }
 
+    //Decode jwt
+    const base64Url = data.access_token.split(".")[1];
+    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+    const jwtPayload = JSON.parse(window.atob(base64));
+
     localStorage.setItem("jwt_token", data.access_token);
+    localStorage.setItem("role", jwtPayload.role);
 
     router.push("/dashboard");
   };

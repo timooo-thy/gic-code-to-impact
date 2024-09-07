@@ -54,6 +54,13 @@ async def get_instrument_field_list(
     item = SearchService(db).getList(field)
     return handle_result(item)
 
+
+@router.get("/counterparty/sum/")
+async def get_sum_of_limits(db: get_db = Depends()):
+    item = SearchService(db).getSumOfLimits()
+    return handle_result(item)
+
+
 @router.get("/counterparty/{instrument_group}") 
 async def get_counterparties_for_instrument_group(
     instrument_group: str, 
@@ -61,11 +68,6 @@ async def get_counterparties_for_instrument_group(
     item = SearchService(db).getCounterparties(instrument_group)
     return handle_result(item)
 
-
-@router.get("/counterparty/sum")
-async def get_sum_of_limits(db: get_db = Depends()):
-    item = SearchService(db).getSumOfLimits()
-    return handle_result(item)
 
 # @router.get("/") 
 # async def get_all_instruments(db: get_db = Depends()):

@@ -34,6 +34,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import Navbar from '@/components/Navbar';
+import { useGetInstruments } from '@/hooks/home';
+import { count } from 'console';
 
 const frameworks = [
   {
@@ -237,11 +239,90 @@ export default function Home() {
   const [open, setOpen] = useState(false);
   const [openCounterParty, setOpenCounterParty] = useState(false);
   const [value, setValue] = useState('');
-  const [instrumentGroup, setInstrumentGroup] = useState('');
-  const [instrument, setInstrument] = useState('');
-  const [settlementCurrency, setSettlementCurrency] = useState('');
-  const [tradeCurrency, setTradeCurrency] = useState('');
-  const [country, setCountry] = useState('');
+
+  const {
+    data: instrumentGroup,
+    isPending: isInstrumentGroupPending,
+    isError: isInstrumentGroupError,
+  } = useGetInstruments('instrument_group');
+  const {
+    data: instruments,
+    isPending: isInstrumentsPending,
+    isError: isInstrumentsError,
+  } = useGetInstruments('instrument');
+  const {
+    data: riskCountry,
+    isPending: isRiskCountryPending,
+    isError: isRiskCountryError,
+  } = useGetInstruments('risk_country');
+  const {
+    data: exchange,
+    isPending: isExchangePending,
+    isError: isExchangeError,
+  } = useGetInstruments('exchange');
+  const {
+    data: tradeCcy,
+    isPending: isTradeCcyPending,
+    isError: isTradeCcyError,
+  } = useGetInstruments('trade_ccy');
+  const {
+    data: settlementCcy,
+    isPending: isSettlementCcyPending,
+    isError: isSettlementCcyError,
+  } = useGetInstruments('settlement_ccy');
+
+  if (
+    isInstrumentGroupPending ||
+    isInstrumentsPending ||
+    isRiskCountryPending ||
+    isExchangePending ||
+    isTradeCcyPending ||
+    isSettlementCcyPending ||
+    isInstrumentGroupError ||
+    isInstrumentsError ||
+    isRiskCountryError ||
+    isExchangeError ||
+    isTradeCcyError ||
+    isSettlementCcyError ||
+    !instrumentGroup ||
+    !instruments
+  ) {
+    // TODO: loading
+    console.log('loading!');
+
+    return <div>Loading...</div>;
+  }
+
+  console.log('instrumentGroup:', instrumentGroup);
+  console.log('instruments:', instruments);
+  console.log('riskCountry:', riskCountry);
+  console.log('exchange:', exchange);
+  console.log('tradeCcy:', tradeCcy);
+  console.log('settlementCcy:', settlementCcy);
+
+  const instrumentsFormData: KeyValuePair[] = instruments.map(
+    (item: string) => ({
+      label: item,
+      value: item,
+    })
+  );
+
+  const settlementFormData: KeyValuePair[] = settlementCcy.map(
+    (item: string) => ({
+      label: item,
+      value: item,
+    })
+  );
+
+  const tradingFormData: KeyValuePair[] = tradeCcy.map((item: string) => ({
+    label: item,
+    value: item,
+  }));
+
+  const countryFormData: KeyValuePair[] = riskCountry.map((item: string) => ({
+    label: item,
+    value: item,
+  }));
 
   return (
     <div className='container mx-auto p-6'>
@@ -269,7 +350,7 @@ export default function Home() {
                   <SelectValue placeholder='Select Instrument Group' />
                 </SelectTrigger>
                 <SelectContent>
-                  {instrumentGroups.map(group => (
+                  {instrumentGroup.map(group => (
                     <SelectItem key={group} value={group}>
                       {group}
                     </SelectItem>
@@ -290,8 +371,9 @@ export default function Home() {
                     className='w-full justify-between'
                   >
                     {value
-                      ? frameworks.find(framework => framework.value === value)
-                          ?.label
+                      ? instrumentsFormData.find(
+                          framework => framework.value === value
+                        )?.label
                       : 'Select Instrument...'}
                     <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                   </Button>
@@ -302,7 +384,7 @@ export default function Home() {
                     <CommandList>
                       <CommandEmpty>No instrument found.</CommandEmpty>
                       <CommandGroup>
-                        {frameworks.map(framework => (
+                        {instrumentsFormData.map(framework => (
                           <CommandItem
                             key={framework.value}
                             value={framework.value}
@@ -504,7 +586,7 @@ export default function Home() {
             ) : (
               <Card className='col-span-full'>
                 <CardHeader>
-                  <CardTitle>Raise Approval Request</CardTitle>
+                  <CardTitle>Search Approved Instruments</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4'>
@@ -528,7 +610,7 @@ export default function Home() {
                           <SelectValue placeholder='Select Instrument Group' />
                         </SelectTrigger>
                         <SelectContent>
-                          {instrumentGroups.map(group => (
+                          {instrumentGroup.map(group => (
                             <SelectItem key={group} value={group}>
                               {group}
                             </SelectItem>
@@ -552,7 +634,7 @@ export default function Home() {
                             className='w-full justify-between'
                           >
                             {value
-                              ? frameworks.find(
+                              ? instrumentsFormData.find(
                                   framework => framework.value === value
                                 )?.label
                               : 'Select Instrument...'}
@@ -565,7 +647,7 @@ export default function Home() {
                             <CommandList>
                               <CommandEmpty>No instrument found.</CommandEmpty>
                               <CommandGroup>
-                                {frameworks.map(framework => (
+                                {instrumentsFormData.map(framework => (
                                   <CommandItem
                                     key={framework.value}
                                     value={framework.value}
@@ -667,7 +749,7 @@ export default function Home() {
                     </div>
                   </div>
                   <Button onClick={handleSearch} className='w-full'>
-                    Submit Request
+                    Search
                   </Button>
                 </CardContent>
               </Card>

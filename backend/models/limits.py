@@ -9,5 +9,5 @@ class LimitModel(Base):
     instrument_group = Column(String)
     counterparty = Column(String)
     currency = Column(String)
-    available_limit = Column(int)
+    available_limit = Column(Integer)
     data_date = Column(DateTime)

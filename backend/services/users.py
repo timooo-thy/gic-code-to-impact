@@ -20,7 +20,7 @@ class UserService(AppService):
     def authenticate_user(self, email: str, password: str) -> ServiceResult:
         user = UserCRUD(self.db).authenticate_user(email, password)
         if not user:
-            return ServiceResult(AppException.InvalidItem())
+            return ServiceResult(AppException.InvalidItem({"error": "Incorrect email or password"}))
         access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
         access_token = create_access_token(data={"email": email}, expires_delta=access_token_expires)
         user_token = UserToken(

@@ -237,6 +237,11 @@ export default function Home() {
   };
 
   const [open, setOpen] = useState(false);
+  const [settlementOpen, setSettlementOpen] = useState(false);
+  const [tradingoOpen, setTradingOpen] = useState(false);
+  const [exchangeOpen, setExchangeOpen] = useState(false);
+  const [countryOpen, setCountryOpen] = useState(false);
+
   const [openCounterParty, setOpenCounterParty] = useState(false);
   const [value, setValue] = useState("");
 
@@ -332,6 +337,10 @@ export default function Home() {
                 </SelectContent>
               </Select>
             </div>
+
+
+
+
             <div className='space-y-2 flex flex-col'>
               <label htmlFor='instrument' className='text-sm font-medium'>
                 Instrument
@@ -385,67 +394,122 @@ export default function Home() {
                 </PopoverContent>
               </Popover>
             </div>
-            <div className='space-y-2'>
-              <label
-                htmlFor='settlementCurrency'
-                className='text-sm font-medium'
-              >
-                Settlement Currency
+
+
+
+            <div className='space-y-2 flex flex-col'>
+              <label htmlFor='settlement' className='text-sm font-medium'>
+                Settlement
               </label>
-              <Input
-                id='settlementCurrency'
-                placeholder='Settlement Currency'
-                value={searchParams.settlementCurrency}
-                onChange={e =>
-                  setSearchParams({
-                    ...searchParams,
-                    settlementCurrency: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className='space-y-2'>
-              <label htmlFor='tradeCurrency' className='text-sm font-medium'>
-                Trade Currency
+              <Popover open={settlementOpen} onOpenChange={setSettlementOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant='outline'
+                    role='combobox'
+                    aria-expanded={open}
+                    className='w-full justify-between'
+                  >
+                    {value
+                      ? settlementFormData.find(framework => framework.value === value)
+                          ?.label
+                      : 'Select Settlement...'}
+                    <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className='w-[380px] p-0'>
+                  <Command>
+                    <CommandInput placeholder='Search Settlement...' />
+                    <CommandList>
+                      <CommandEmpty>No Settlement found.</CommandEmpty>
+                      <CommandGroup>
+                        {settlementFormData.map(framework => (
+                          <CommandItem
+                            key={framework.value}
+                            value={framework.value}
+                            onSelect={currentValue => {
+                              setValue(
+                                currentValue === value ? '' : currentValue
+                              );
+                              setOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                'mr-2 h-4 w-4',
+                                value === framework.value
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
+                              )}
+                            />
+                            {framework.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div> 
+
+
+
+
+
+            <div className='space-y-2 flex flex-col'>
+              <label htmlFor='settlement' className='text-sm font-medium'>
+                Trading
               </label>
-              <Input
-                id='tradeCurrency'
-                placeholder='Trade Currency'
-                value={searchParams.tradeCurrency}
-                onChange={e =>
-                  setSearchParams({
-                    ...searchParams,
-                    tradeCurrency: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className='space-y-2'>
-              <label htmlFor='country' className='text-sm font-medium'>
-                Country
-              </label>
-              <Input
-                id='country'
-                placeholder='Country'
-                value={searchParams.country}
-                onChange={e =>
-                  setSearchParams({ ...searchParams, country: e.target.value })
-                }
-              />
-            </div>
-            <div className='space-y-2'>
-              <label htmlFor='exchange' className='text-sm font-medium'>
-                Exchange
-              </label>
-              <Input
-                id='exchange'
-                placeholder='Exchange'
-                value={searchParams.exchange}
-                onChange={e =>
-                  setSearchParams({ ...searchParams, exchange: e.target.value })
-                }
-              />
-            </div>
+              <Popover open={tradingoOpen} onOpenChange={setTradingOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant='outline'
+                    role='combobox'
+                    aria-expanded={open}
+                    className='w-full justify-between'
+                  >
+                    {value
+                      ? tradingFormData.find(framework => framework.value === value)
+                          ?.label
+                      : 'Select Trading...'}
+                    <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className='w-[380px] p-0'>
+                  <Command>
+                    <CommandInput placeholder='Search Trading...' />
+                    <CommandList>
+                      <CommandEmpty>No Trading found.</CommandEmpty>
+                      <CommandGroup>
+                        {tradingFormData.map(framework => (
+                          <CommandItem
+                            key={framework.value}
+                            value={framework.value}
+                            onSelect={currentValue => {
+                              setValue(
+                                currentValue === value ? '' : currentValue
+                              );
+                              setOpen(false);
+                            }}
+                          >
+                            <Check
+                              className={cn(
+                                'mr-2 h-4 w-4',
+                                value === framework.value
+                                  ? 'opacity-100'
+                                  : 'opacity-0'
+                              )}
+                            />
+                            {framework.label}
+                          </CommandItem>
+                        ))}
+                      </CommandGroup>
+                    </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+            </div> 
+
+
           </div>
           <Button onClick={handleSearch} className='w-full'>
             Search

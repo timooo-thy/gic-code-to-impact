@@ -20,103 +20,55 @@ import uFuzzy from "@leeoniya/ufuzzy";
 import { useDebounce } from "@/lib/hooks";
 import { ConfirmationDialog } from "./ConfirmationDialog";
 import { IncomingRequestType } from "@/lib/types";
-
-// Mocked data
-const mockedIncomingRequests: IncomingRequestType[] = [
-  {
-    id: "1",
-    instrument_name: "AAPL",
-    currency: "USD",
-    country: "USA",
-    exchange_name: "NASDAQ",
-    department: "Trading",
-    user_email: "example@gmail.com",
-  },
-  {
-    id: "2",
-    instrument_name: "GOOGL",
-    currency: "USD",
-    country: "USA",
-    exchange_name: "NASDAQ",
-    department: "Research",
-    user_email: "timothy@gmail.com",
-  },
-  {
-    id: "3",
-    instrument_name: "AMZN",
-    currency: "USD",
-    country: "USA",
-    exchange_name: "NASDAQ",
-    department: "Finance",
-    user_email: "example@gmail.com",
-  },
-  {
-    id: "4",
-    instrument_name: "TSLA",
-    currency: "USD",
-    country: "USA",
-    exchange_name: "NASDAQ",
-    department: "Trading",
-    user_email: "example@gmail.com",
-  },
-  {
-    id: "5",
-    instrument_name: "MSFT",
-    currency: "USD",
-    country: "USA",
-    exchange_name: "NASDAQ",
-    department: "Compliance",
-    user_email: "example@gmail.com",
-  },
-  {
-    id: "6",
-    instrument_name: "AAPL",
-    currency: "USD",
-    country: "USA",
-    exchange_name: "NASDAQ",
-    department: "Trading",
-    user_email: "example@gmail.com",
-  },
-  {
-    id: "7",
-    instrument_name: "GOOGL",
-    currency: "USD",
-    country: "USA",
-    exchange_name: "NASDAQ",
-    department: "Research",
-    user_email: "example@gmail.com",
-  },
-];
+import { toast } from "sonner";
+import { supabase } from "@/lib/db";
 
 export default function AdminDashboard() {
   const [incomingRequests, setIncomingRequests] = useState<
     IncomingRequestType[]
   >([]);
 
-  // useEffect(() => {
-  //   const fetchIncomingRequests = async () => {
-  //     const response = await fetch(
-  //       process.env.NEXT_PUBLIC_FASTAPI_URL + `/approval-request`
-  //     );
-  //     if (!response.ok) {
-  //       console.log("Error fetching counterparties");
-  //     }
+  useEffect(() => {
+    const fetchIncomingRequests = async () => {
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_FASTAPI_URL + `/approval-request/all`
+      );
+      if (!response.ok) {
+        toast.error("Error fetching counterparties");
+      }
 
-  //     const counterPartyLimits =
-  //       (await response.json()) as IncomingRequestType[];
+      const counterPartyLimits =
+        (await response.json()) as IncomingRequestType[];
 
-  //     setIncomingRequests(counterPartyLimits);
-  //   };
+      setIncomingRequests(counterPartyLimits);
+    };
+    const handleUpdates = () => {
+      toast.info("A new request has been made");
+      fetchIncomingRequests();
+    };
 
-  //   fetchIncomingRequests();
-  // }, [setIncomingRequests]);
+    const channel = supabase
+      .channel("requests")
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "requests" },
+        handleUpdates
+      )
+      .subscribe();
+
+    fetchIncomingRequests();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, []);
 
   return (
     <main className="flex min-h-screen w-4/5 flex-col m-auto">
       <Navbar />
       <div className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 max-h-[500px]">
-          <LimitTable incomingRequests={mockedIncomingRequests} />
+          <LimitTable incomingRequests={incomingRequests} />
         </div>
       </div>
     </main>
@@ -130,7 +82,7 @@ type LimitTableProps = {
 const LimitTable = ({ incomingRequests }: LimitTableProps) => {
   const [searchTerm, setSearchTerm] = useState("");
   const requestors = useMemo(
-    () => incomingRequests.map((request) => request.user_email),
+    () => incomingRequests.map((request) => request.email),
     [incomingRequests]
   );
   const u = useMemo(() => new uFuzzy(), []);
@@ -164,7 +116,11 @@ const LimitTable = ({ incomingRequests }: LimitTableProps) => {
               {incomingRequests.length} incoming requests for approval
             </CardDescription>
           </div>
-          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          <SearchBar
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            placeHolder="Search Requestor..."
+          />
         </div>
       </CardHeader>
       <CardContent className="flex-grow overflow-auto">
@@ -185,10 +141,10 @@ const LimitTable = ({ incomingRequests }: LimitTableProps) => {
               filteredRequestors.map((requestor) => (
                 <TableRow key={requestor.id} className="h-16">
                   <TableCell className="font-medium">
-                    {requestor.user_email}
+                    {requestor.email}
                   </TableCell>
                   <TableCell>{requestor.instrument_name}</TableCell>
-                  <TableCell>{requestor.currency}</TableCell>
+                  <TableCell>{requestor.trade_ccy}</TableCell>
                   <TableCell>{requestor.country}</TableCell>
                   <TableCell>{requestor.department}</TableCell>
                   <TableCell>{requestor.exchange_name}</TableCell>
@@ -196,7 +152,6 @@ const LimitTable = ({ incomingRequests }: LimitTableProps) => {
                     <ConfirmationDialog
                       title="Approve Request"
                       description="Are you sure you want to approve this request?"
-                      buttonText="Approve"
                       requestor={requestor}
                     />
                   </TableCell>

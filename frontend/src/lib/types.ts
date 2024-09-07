@@ -4,11 +4,13 @@ export enum Role {
 }
 
 export type IncomingRequestType = {
-  id: string;
+  id: number;
+  email: string;
   instrument_name: string;
-  currency: string;
+  trade_ccy: string;
+  settlement_ccy: string;
   country: string;
   exchange_name: string;
   department: string;
-  user_email: string;
+  approved: boolean;
 };

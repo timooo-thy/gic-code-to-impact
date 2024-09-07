@@ -143,7 +143,6 @@ export default function UserDashboard() {
         </div>
         <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 max-h-[500px]">
           <LimitTable instrumentGroupParties={instrumentGroupParties} />
-          <TradeSummaryCard />
         </div>
       </div>
     </main>
@@ -197,7 +196,11 @@ const LimitTable = ({ instrumentGroupParties }: LimitTableProps) => {
               {instrumentGroupParties[0]?.instrument_group}
             </CardDescription>
           </div>
-          <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+          <SearchBar
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+            placeHolder="Search Counterparty"
+          />
         </div>
       </CardHeader>
 

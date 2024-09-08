@@ -36,8 +36,8 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <Toaster richColors position="bottom-left" />
             <ChatOverlay />
-            <Toaster richColors />
           </ThemeProvider>
         </Provider>
       </body>

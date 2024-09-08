@@ -55,7 +55,7 @@ export default function Navbar() {
           Trades
         </Link>
         <Link
-          href='/requests'
+          href='/approvals'
           className='text-muted-foreground transition-colors hover:text-foreground'
         >
           Requests
@@ -82,7 +82,7 @@ export default function Navbar() {
               Dashboard
             </Link>
             <Link
-              href='s'
+              href='/trades'
               className='text-muted-foreground hover:text-foreground'
             >
               Recent Trades

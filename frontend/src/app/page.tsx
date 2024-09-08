@@ -33,9 +33,13 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from '@/components/ui/popover';
-import { useCreateApprovalRequestMutation, useGetInstruments } from '@/hooks/home';
+} from "@/components/ui/popover";
+import {
+  useCreateApprovalRequestMutation,
+  useGetInstruments,
+} from "@/hooks/home";
 import Navbar from "@/components/Navbar";
+import { toast } from "sonner";
 
 // Mock data for the trading instruments
 const mockTradingInstruments = [
@@ -86,34 +90,6 @@ const mockTradingInstruments = [
   },
 ];
 
-// Mock data for past trading history
-const mockPastTrades = [
-  {
-    id: 1,
-    name: "Apple Inc.",
-    instrumentGroup: "Stocks",
-    amount: 100,
-    price: 150.25,
-    date: "2023-06-01",
-  },
-  {
-    id: 2,
-    name: "EUR/USD",
-    instrumentGroup: "Forex",
-    amount: 10000,
-    price: 1.1234,
-    date: "2023-06-02",
-  },
-  {
-    id: 3,
-    name: "Gold Futures",
-    instrumentGroup: "Commodities",
-    amount: 5,
-    price: 1800.5,
-    date: "2023-06-03",
-  },
-];
-
 const frameworks = [
   {
     label: "hello",
@@ -126,23 +102,6 @@ const frameworks = [
   {
     label: "hello2",
     value: "hello2",
-  },
-];
-
-// Mock data for submitted requests
-const mockSubmittedRequests = [
-  {
-    id: 1,
-    instrumentName: "Tesla Inc.",
-    status: "Approved",
-    date: "2023-06-04",
-  },
-  { id: 2, instrumentName: "JPY/USD", status: "Pending", date: "2023-06-05" },
-  {
-    id: 3,
-    instrumentName: "Silver Futures",
-    status: "Rejected",
-    date: "2023-06-06",
   },
 ];
 
@@ -188,15 +147,16 @@ export default function Home() {
 
   const submitApprovalRequest = () => {
     approvalRequestMutation.mutate({
-      email: "btjm123@gmail.com",
-      instrument_name: v5,
+      email: "timothylhy@hotmail.com",
       settlement_ccy: v6,
-      trading_ccy: v7,
+      trade_ccy: v7,
       country: v8,
       exchange_name: v9,
-      department: "btjm123",
-    })
-  }
+      department: "RE",
+      instrument_group: v10,
+      instrument_name: v5,
+    });
+  };
 
   const handleSearch = () => {
     const filtered = mockTradingInstruments.filter((instrument) => {
@@ -260,7 +220,6 @@ export default function Home() {
   const [v5, setV5] = useState("");
   const [v5Open, setV5Open] = useState(false);
 
-
   const [v6, setV6] = useState("");
   const [v6Open, setV6Open] = useState(false);
 
@@ -278,7 +237,7 @@ export default function Home() {
 
   const [v11, setV11] = useState("");
   const [v11Open, setV11Open] = useState(false);
-  
+
   const {
     data: instrumentGroup,
     isPending: isInstrumentGroupPending,
@@ -327,17 +286,9 @@ export default function Home() {
     !instruments
   ) {
     // TODO: loading
-    console.log("loading!");
 
     return <div>Loading...</div>;
   }
-
-  console.log("instrumentGroup:", instrumentGroup);
-  console.log("instruments:", instruments);
-  console.log("riskCountry:", riskCountry);
-  console.log("exchange:", exchange);
-  console.log("tradeCcy:", tradeCcy);
-  console.log("settlementCcy:", settlementCcy);
 
   const instrumentsFormData: KeyValuePair[] = instruments.map(
     (item: string) => ({
@@ -531,9 +482,13 @@ export default function Home() {
                   </Command>
                 </PopoverContent>
               </Popover> */}
-              <CreatableSelect isClearable options={settlementFormData} onInputSelect={(val) => {
-                setValue(val)
-              }} />
+              <CreatableSelect
+                isClearable
+                options={settlementFormData}
+                onInputSelect={(val) => {
+                  setValue(val);
+                }}
+              />
             </div>
 
             <div className="space-y-2 flex flex-col">
@@ -587,9 +542,13 @@ export default function Home() {
                   </Command>
                 </PopoverContent>
               </Popover> */}
-              <CreatableSelect isClearable options={tradingFormData} onInputSelect={(val) => {
-                setValue(val)
-              }} />
+              <CreatableSelect
+                isClearable
+                options={tradingFormData}
+                onInputSelect={(val) => {
+                  setValue(val);
+                }}
+              />
             </div>
 
             <div className="space-y-2 flex flex-col">
@@ -643,9 +602,13 @@ export default function Home() {
                   </Command>
                 </PopoverContent>
               </Popover> */}
-              <CreatableSelect isClearable options={countryFormData} onInputSelect={(val) => {
-                setValue(val)
-              }} />
+              <CreatableSelect
+                isClearable
+                options={countryFormData}
+                onInputSelect={(val) => {
+                  setValue(val);
+                }}
+              />
             </div>
 
             <div className="space-y-2 flex flex-col">
@@ -699,9 +662,13 @@ export default function Home() {
                   </Command>
                 </PopoverContent>
               </Popover> */}
-              <CreatableSelect isClearable options={exchangeFormData} onInputSelect={(val) => {
-                setValue(val)
-              }} />
+              <CreatableSelect
+                isClearable
+                options={exchangeFormData}
+                onInputSelect={(val) => {
+                  setValue(val);
+                }}
+              />
             </div>
           </div>
           <Button onClick={handleSearch} className="w-full">
@@ -715,7 +682,7 @@ export default function Home() {
           {/* <Button onClick={handleBack} className='mb-4'>
             <ArrowLeft className='mr-2 h-4 w-4' /> Back to Dashboard
           </Button> */}
-          <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {filteredInstruments.length > 0 ? (
               filteredInstruments.map((instrument) => (
                 <Card key={instrument.id}>
@@ -922,9 +889,14 @@ export default function Home() {
                       >
                         Settlement
                       </label>
-                      <CreatableSelect isClearable options={settlementFormData} onInputChange={(value) => {
-                        setV6(value);
-                      }} />
+                      <CreatableSelect
+                        isClearable
+                        options={settlementFormData}
+                        onInputChange={(value) => {
+                          console.log("value", value);
+                          setV6(value);
+                        }}
+                      />
                       {/* <Popover open={v6Open} onOpenChange={setV6Open}>
                         <PopoverTrigger asChild>
                           <Button
@@ -983,9 +955,13 @@ export default function Home() {
                       >
                         Trading
                       </label>
-                      <CreatableSelect isClearable options={tradingFormData} onInputChange={(value) => {
-                        setV7(value);
-                      }} />
+                      <CreatableSelect
+                        isClearable
+                        options={tradingFormData}
+                        onInputChange={(value) => {
+                          setV7(value);
+                        }}
+                      />
                       {/* <Popover open={v7Open} onOpenChange={setV7Open}>
                         <PopoverTrigger asChild>
                           <Button
@@ -1044,9 +1020,13 @@ export default function Home() {
                       >
                         Country
                       </label>
-                      <CreatableSelect isClearable options={countryFormData} onInputChange={(value) => {
-                        setV8(value);
-                      }} />
+                      <CreatableSelect
+                        isClearable
+                        options={countryFormData}
+                        onInputChange={(value) => {
+                          setV8(value);
+                        }}
+                      />
                       {/* <Popover open={v8Open} onOpenChange={setV8Open}>
                         <PopoverTrigger asChild>
                           <Button
@@ -1105,9 +1085,13 @@ export default function Home() {
                       >
                         Exchange
                       </label>
-                      <CreatableSelect isClearable options={exchangeFormData} onInputChange={(value) => {
-                        setV9(value);
-                      }} />
+                      <CreatableSelect
+                        isClearable
+                        options={exchangeFormData}
+                        onInputChange={(value) => {
+                          setV9(value);
+                        }}
+                      />
                       {/* <Popover open={v9Open} onOpenChange={setV9Open}>
                         <PopoverTrigger asChild>
                           <Button
@@ -1159,7 +1143,13 @@ export default function Home() {
                       </Popover> */}
                     </div>
                   </div>
-                  <Button onClick={submitApprovalRequest} className='w-full'>
+                  <Button
+                    onClick={() => {
+                      submitApprovalRequest();
+                      toast.success("Approval request submitted successfully!");
+                    }}
+                    className="w-full"
+                  >
                     Submit Approval Request
                   </Button>
                 </CardContent>
@@ -1168,7 +1158,7 @@ export default function Home() {
           </div>
         </>
       ) : (
-        <div className='grid grid-cols-1 lg:grid-cols-2 gap-6'>
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* <Card>
             <CardHeader>
               <CardTitle>Past Trading History</CardTitle>

@@ -5,8 +5,9 @@ from typing import Optional
 class ApprovalRequestFormFromTrader(BaseModel):
     email: str
     instrument_name: str
+    instrument_group: str
+    trade_ccy: str
     settlement_ccy: str
-    trading_ccy: str
     country: str
     exchange_name: str
     department: str
@@ -17,18 +18,24 @@ class CreateApprovalRequestResponseBody(BaseModel):
 
 
 class GetNonApprovedRequest(BaseModel):
+    id: int
     email: str
     instrument_name: str
-    currency: str
+    instrument_group: str
+    trade_ccy: str
+    settlement_ccy: str
     country: str
     exchange_name: str
     department: str
 
 
 class GetAllRequest(BaseModel):
+    id: int
     email: str
     instrument_name: str
-    currency: str
+    instrument_group: str
+    trade_ccy: str
+    settlement_ccy: str
     country: str
     exchange_name: str
     department: str

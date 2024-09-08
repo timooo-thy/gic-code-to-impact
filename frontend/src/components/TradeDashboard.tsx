@@ -18,6 +18,7 @@ import {
 import Navbar from '@/components/Navbar';
 import TradeSummaryCard from '@/components/TradeSummaryCard';
 import { useEffect, useState } from 'react';
+import { ChatOverlay } from './ChatOverlay';
 
 type Trade = {
   instrument: string;
@@ -217,7 +218,8 @@ const LimitTable = ({
           </Table>
         </CardContent>
       </Card>
-      <Card className='col-span-full h-[250px] flex flex-col'>
+      <ChatOverlay />
+      {/* <Card className='col-span-full h-[250px] flex flex-col'>
         <CardHeader className='flex-shrink-0'>
           <CardTitle>Chat with your trades</CardTitle>
           <CardDescription>
@@ -246,7 +248,7 @@ const LimitTable = ({
             </CardDescription>
           )}
         </CardContent>
-      </Card>
+      </Card> */}
       <TradeSummaryCard />
     </>
   );

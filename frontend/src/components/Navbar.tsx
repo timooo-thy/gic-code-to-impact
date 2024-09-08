@@ -38,7 +38,13 @@ export default function Navbar() {
         />
         <Link
           href='/'
-          className='text-foreground transition-colors hover:text-foreground'
+          className='text-muted-foreground transition-colors hover:text-foreground'
+        >
+          Home
+        </Link>
+        <Link
+          href='/dashboard'
+          className='text-muted-foreground transition-colors hover:text-foreground'
         >
           Dashboard
         </Link>

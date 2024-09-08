@@ -1,6 +1,7 @@
 import datetime
 
 from ..models.approval_requests import ApprovalRequestModel
+from ..models.instruments import InstrumentModel
 from ..schemas.approval_requests import ApprovalRequestFormFromTrader, GetNonApprovedRequest, GetAllRequest
 from ..services.main import AppService, AppCRUD
 from ..utils.service_result import ServiceResult
@@ -68,7 +69,18 @@ class ApprovalRequestCRUD(AppCRUD):
                                                           ApprovalRequestModel.approved == False).first()
         if item:
             item.approved = True
+            approved_instrument = InstrumentModel(
+                instrument=item.instrument_name,
+                instrument_group=item.instrument_group,
+                department=item.department,
+                risk_country=item.country,
+                exchange=item.exchange_name,
+                trade_ccy=item.trade_ccy,
+                settlement_ccy=item.settlement_ccy
+            )
+            self.db.add(approved_instrument)
             self.db.commit()
+            self.db.refresh(approved_instrument)
             return True
         return False
 

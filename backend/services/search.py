@@ -25,34 +25,34 @@ class SearchService(AppService):
 class SearchCrud(AppCRUD):
     def search(self, instrument_group, instrument, department, risk_country, exchange, trade_ccy, settlement_ccy, limit, offset):
         query = None
-        if instrument_group is not None:
+        if instrument_group is not None and instrument_group != "":
             query = self.db.query(InstrumentModel).filter(InstrumentModel.instrument_group == instrument_group)
-        if instrument is not None:
+        if instrument is not None and instrument != "":
             if query:
               query = query.filter(func.similarity(InstrumentModel.instrument, instrument) > 0.3)
             else:
               query = self.db.query(InstrumentModel).filter(func.similarity(InstrumentModel.instrument, instrument) > 0.3)
-        if department is not None:
+        if department is not None and department != "":
             if query:
                 query = query.filter(InstrumentModel.department == department)
             else:
                 query = self.db.query(InstrumentModel).filter(InstrumentModel.department == department)
-        if risk_country is not None:
+        if risk_country is not None and risk_country != "":
             if query:
                 query = query.filter(InstrumentModel.risk_country == risk_country)
             else:
               query = self.db.query(InstrumentModel).filter(InstrumentModel.risk_country == risk_country)
-        if exchange is not None:
+        if exchange is not None and exchange != "":
             if query:
                 query = query.filter(InstrumentModel.exchange == exchange)
             else:
               query = self.db.query(InstrumentModel).filter(InstrumentModel.exchange == exchange)
-        if trade_ccy is not None:
+        if trade_ccy is not None and trade_ccy != "":
             if query:
                 query = query.filter(InstrumentModel.trade_ccy == trade_ccy)
             else:
               query = self.db.query(InstrumentModel).filter(InstrumentModel.trade_ccy == trade_ccy)
-        if settlement_ccy is not None:
+        if settlement_ccy is not None and settlement_ccy != "":
             if query:
                 query = query.filter(InstrumentModel.settlement_ccy == settlement_ccy)
             else:

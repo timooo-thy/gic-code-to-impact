@@ -37,9 +37,12 @@ import {
 import {
   useCreateApprovalRequestMutation,
   useGetInstruments,
+  useGetSearchData,
+  useModifyTrade,
 } from "@/hooks/home";
 import Navbar from "@/components/Navbar";
 import { toast } from "sonner";
+import { frameworks } from "@/lib/constants";
 
 // Mock data for the trading instruments
 const mockTradingInstruments = [
@@ -72,12 +75,12 @@ const mockTradingInstruments = [
   },
   {
     id: 4,
-    name: "UK Gilt",
+    name: "0% Convertible Bonds",
     instrumentGroup: "Bonds",
-    settlementCurrency: "GBP",
-    tradeCurrency: "GBP",
-    country: "UK",
-    exchange: "LSE",
+    settlementCurrency: "SGD",
+    tradeCurrency: "NGN",
+    country: "JAPAN",
+    exchange: "MESDAQ",
   },
   {
     id: 5,
@@ -87,21 +90,6 @@ const mockTradingInstruments = [
     tradeCurrency: "BTC",
     country: "Global",
     exchange: "Binance",
-  },
-];
-
-const frameworks = [
-  {
-    label: "hello",
-    value: "hello",
-  },
-  {
-    label: "hello1",
-    value: "hello1",
-  },
-  {
-    label: "hello2",
-    value: "hello2",
   },
 ];
 
@@ -147,16 +135,20 @@ export default function Home() {
 
   const submitApprovalRequest = () => {
     approvalRequestMutation.mutate({
-      email: "timothylhy@hotmail.com",
-      settlement_ccy: v6,
-      trade_ccy: v7,
-      country: v8,
-      exchange_name: v9,
+      email: "timothylhy@gic.com",
+      settlement_ccy: "AED",
+      trade_ccy: "AED",
+      country: "ARGENTINA",
+      exchange_name: "Abu Dhabi",
       department: "RE",
-      instrument_group: v10,
-      instrument_name: v5,
+      instrument_group: "Bonds",
+      instrument_name: "0% Convertible Bonds",
     });
   };
+
+  const [amount, setAmount] = useState(0);
+
+  const mutation = useModifyTrade();
 
   const handleSearch = () => {
     const filtered = mockTradingInstruments.filter((instrument) => {
@@ -183,12 +175,31 @@ export default function Home() {
             .includes(searchParams.exchange.toLowerCase()))
       );
     });
+
     setFilteredInstruments(filtered);
     setHasSearched(true);
   };
 
   const handleTrade = (instrumentId: number) => {
     // Implement trade logic here
+    // const fetchTrade = async () => {
+    //   const response = await fetch(
+    //     `${process.env.NEXT_PUBLIC_FASTAPI_URL}/trade/${instrumentId}`
+    //   );
+    //   const data = await response.json();
+    mutation.mutate({
+      trader_id: 30,
+      email: "jiamin@gic.com",
+      instrument_name: "0% Convertible Bonds",
+      instrument_group: "Bonds",
+      trade_ccy: "NGN",
+      settlement_ccy: "SGD",
+      country: "JAPAN",
+      exchange_name: "MESDAQ",
+      department: "RE",
+      amount: amount,
+    });
+
     console.log(`Trading instrument with ID: ${instrumentId}`);
   };
 
@@ -237,6 +248,18 @@ export default function Home() {
 
   const [v11, setV11] = useState("");
   const [v11Open, setV11Open] = useState(false);
+
+  // const { data1, isPending, isError } = useGetSearchData(
+  //   "",
+  //   value,
+  //   "",
+  //   v3,
+  //   v4,
+  //   v2,
+  //   v1
+  // );
+
+  // console.log(data1);
 
   const {
     data: instrumentGroup,
@@ -289,6 +312,14 @@ export default function Home() {
 
     return <div>Loading...</div>;
   }
+
+  // useEffect(() => {
+  //   setV5(value);
+  //   setV6(v1);
+  //   setV7(v2);
+  //   setV8(v3);
+  //   setV9(v4);
+  // }, [hasSearched, v1, v2, v3, v4]);
 
   const instrumentsFormData: KeyValuePair[] = instruments.map(
     (item: string) => ({
@@ -771,6 +802,13 @@ export default function Home() {
                     </div>
                   </CardContent>
                   <CardFooter>
+                    <Input
+                      type="number"
+                      value={amount}
+                      onChange={(e) => {
+                        setAmount(parseInt(e.target.value));
+                      }}
+                    />
                     <Button
                       onClick={() => handleTrade(instrument.id)}
                       className="w-full"
@@ -825,6 +863,7 @@ export default function Home() {
                         Instrument
                       </label>
                       <CreatableSelect
+                        defaultInputValue={v1}
                         isClearable
                         options={instrumentsFormData}
                         onInputChange={(value: string) => {

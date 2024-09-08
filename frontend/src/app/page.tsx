@@ -189,15 +189,16 @@ export default function Home() {
     //   const data = await response.json();
     mutation.mutate({
       trader_id: 30,
-      email: "jiamin@gic.com",
-      instrument_name: "0% Convertible Bonds",
+      instrument: "0% Convertible Bonds",
       instrument_group: "Bonds",
       trade_ccy: "NGN",
       settlement_ccy: "SGD",
-      country: "JAPAN",
-      exchange_name: "MESDAQ",
+      risk_country: "JAPAN",
+      exchange: "MESDAQ",
       department: "RE",
       amount: amount,
+      counterparty: "Barclays Bank PLC",
+      trade_date: new Date().toISOString(),
     });
 
     console.log(`Trading instrument with ID: ${instrumentId}`);

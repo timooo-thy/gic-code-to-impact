@@ -61,7 +61,7 @@ export const useGetSearchData = (
 
 interface TradingPayload {
   trader_id: number;
-  instrument_name: string;
+  instrument: string;
   settlement_ccy: string;
   trade_ccy: string;
   risk_country: string;

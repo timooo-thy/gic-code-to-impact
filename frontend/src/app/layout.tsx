@@ -11,6 +11,7 @@ import {
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { Provider } from "@/Provider";
 import { Toaster } from "@/components/ui/sonner";
+import { ChatOverlay } from "@/components/ChatOverlay";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -35,6 +36,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             {children}
+            <ChatOverlay />
             <Toaster richColors />
           </ThemeProvider>
         </Provider>

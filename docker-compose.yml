@@ -9,6 +9,8 @@ services:
         - NEXT_PUBLIC_SUPABASE_ANON_KEY
     ports:
       - "3000:3000"
+    environment:
+      - OPENAP_API_KEY
 
   backend:
     build:

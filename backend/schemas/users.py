@@ -30,3 +30,7 @@ class UserTokenData(BaseModel):
 class UserToken(BaseModel):
     access_token: str
     token_type: str
+
+
+class JWTToken(BaseModel):
+    access_token:str

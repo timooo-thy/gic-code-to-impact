@@ -36,13 +36,13 @@ export default function Navbar() {
           Dashboard
         </Link>
         <Link
-          href="/recentTrade"
+          href="/trades"
           className="text-muted-foreground transition-colors hover:text-foreground"
         >
           Recent Trades
         </Link>
         <Link
-          href="/status"
+          href="/approvals"
           className="text-muted-foreground transition-colors hover:text-foreground"
         >
           Approval Status
@@ -69,7 +69,7 @@ export default function Navbar() {
               Dashboard
             </Link>
             <Link
-              href="/recentTrade"
+              href="/trades"
               className="text-muted-foreground hover:text-foreground"
             >
               Recent Trades

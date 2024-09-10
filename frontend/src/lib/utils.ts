@@ -38,28 +38,36 @@ Learn more:
 
 export const internalData = `
 INTERNAL DATA:
-Based on the information provided, here's a summary of your trades:
-
-Total number of trades: 9
-Date range: From April 1, 2024 to April 8, 2024 (with one trade from March 7, 2024)
-Instruments traded:
-Bonds: 8 trades
-Credit Linked Notes: 1 trade
-Total amount traded: $91,854,822 (assuming all amounts are in USD)
-Most common counterparty: Citibank International Ltd (5 trades)
-Exchanges used:
-BOMBAY STOCK EXCHANGE (3 trades)
-Others include NASDAQ OMX HELSINKII, Hong Kong Stock Exchange, China Financial Futures Exchange, NASDAQ CAPITAL MARKET(CM), Bolsas Y Mercados Argentinos, and Borsa Italiana
-Risk countries:
-India (3 trades)
-Hong Kong (2 trades)
-Others include Finland, United States, Argentina, and Italy
-Currency diversity:
-Trade currencies: 9 different currencies used (PLN, COP, VND, GBP, USD, KZT, AUD, ILS, EUR)
-Settlement currencies: 9 different currencies used (GBP, USD, CAD, AED, CHF, DKK, ARS, USD, NZD)
-Largest trade: $19,500,000 in Bonds on April 4, 2024, with Citibank International Ltd on BOMBAY STOCK EXCHANGE
-Smallest trade: $754,822 in Credit Linked Notes on March 7, 2024, with BNP Paribas on NASDAQ OMX HELSINKII
--------
-If user asks about "APPLE NEWS", repeat the apple news exactly the same way in the next message.
-ELSE, use the repeat the INTERNAL DATA in the next message.
+ID	Trade Date	Instrument	Amount	Counterparty	Exchange	Risk Country	Trade CCY	Settlement CCY
+1	2024-03-07T00:54:01+00:00	Credit Linked Notes	$754,822	BNP Paribas	NASDAQ OMX HELSINKII	FINLAND	PLN	GBP
+2	2024-04-06T04:31:08+00:00	Bonds	$7,500,000	CIBC World Markets Inc.	Hong Kong Stock Exchange	HONG KONG	COP	USD
+3	2024-04-05T09:57:27+00:00	Bonds	$12,000,000	CIMB Bank Berhad	China Financial Futures Exchange	HONG KONG	VND	CAD
+4	2024-04-08T09:09:08+00:00	Bonds	$16,000,000	Citibank (China) Co. Ltd	BOMBAY STOCK EXCHANGE	INDIA	GBP	AED
+5	2024-04-04T06:45:52+00:00	Bonds	$19,500,000	Citibank International Ltd	BOMBAY STOCK EXCHANGE	INDIA	USD	CHF
+6	2024-04-07T07:00:10+00:00	Bonds	$14,200,000	Citibank International Ltd	BOMBAY STOCK EXCHANGE	INDIA	KZT	DKK
+7	2024-04-03T22:25:29+00:00	Bonds	$9,800,000	Citibank International Ltd	NASDAQ CAPITAL MARKET(CM)	UNITED STATES	AUD	ARS
+8	2024-04-07T06:53:10+00:00	Bonds	$5,400,000	Citibank International Ltd	Bolsas Y Mercados Argentinos	ARGENTINA	ILS	USD
+9	2024-04-01T20:31:27+00:00	Bonds	$6,700,000	Citibank International Ltd	Borsa Italiana	ITALY	EUR	NZD
+10	2024-04-06T12:19:07+00:00	Bonds	$15,000,000	Citibank International Ltd	Borsa Italiana	ITALY	CHF	IDR
+11	2024-04-03T17:30:25+00:00	Bonds	$7,300,000	CIMB Bank Berhad	Borsa Italiana	ITALY	PHP	PHP
+12	2024-04-06T00:35:52+00:00	Equities	$9,300,000	Itau Corretora De Valores S.A.	Bolsas Y Mercados Argentinos	ARGENTINA	HKD	USD
+13	2024-04-07T18:31:58+00:00	Equities	$8,300,000	J&E Davy	ASX TRADE24	AUSTRALIA	PKR	AUD
+14	2024-04-01T15:49:22+00:00	Equities	$12,500,000	J.P. Morgan Securities (Asia Pacific) Limited	ASX TRADE24	AUSTRALIA	UYU	AUD
+15	2024-04-06T13:27:02+00:00	Equities	$14,100,000	J.P. Morgan Securities (Far East) Limited	Vienna Stock Exchange	AUSTRIA	AED	EUR
+16	2024-04-02T16:10:47+00:00	Equities	$6,200,000	J.P. Morgan Securities LLC	Kuwait Stock Exchange	BAHRAIN	PLN	KWD
+17	2024-04-05T12:20:12+00:00	Equities	$8,100,000	J.P. Morgan Securities Plc	Kuwait Stock Exchange	BAHRAIN	DOP	KWD
+18	2024-04-05T09:14:49+00:00	Equities	$11,000,000	J.P. Morgan Securities (Far East) Limited	NYSE EURONEXTBRUSSELS	BELGIUM	SGD	BEL
+19	2024-04-08T10:33:12+00:00	Equities	$17,700,000	J.P. Morgan Securities LLC	SANTIAGO STOCK EXCHANGE	CHILE	MXN	USD
+20	2024-04-06T04:38:13+00:00	Equities	$9,600,000	J.P. Morgan Securities Plc	China Financial Futures Exchange	CHINA	SAR	CNY
+21	2024-04-04T12:50:12+00:00	Equities	$12,300,000	Kotak Securities Limited	Not Applicable	COLUMBIA	LKR	MXN
+22	2024-04-07T02:20:43+00:00	Equities	$6,700,000	J.P. Morgan Securities (Far East) Limited	Not Applicable	CZECH REPUBLIC	NOK	DOP
+23	2024-04-04T13:44:37+00:00	Equities	$8,800,000	J.P. Morgan Securities LLC	OMX Nordic Exchange Copenhagen	DENMARK	EGP	DKK
+24	2024-04-04T19:02:11+00:00	Equities	$9,900,000	J.P. Morgan Securities Plc	OMX Nordic Exchange Copenhagen	DENMARK	GBP	DKK
+25	2024-04-07T11:39:47+00:00	Equities	$10,500,000	Macquarie Securities Korea Limited	OMX Nordic Exchange Copenhagen	DENMARK	AUD	COP
+26	2024-04-08T08:32:55+00:00	Equities	$6,500,000	MainFirst Bank AG	OMX Nordic Exchange Copenhagen	DENMARK	UAH	BEF
+27	2024-04-05T02:49:20+00:00	Equities	$7,200,000	MEDIOBANCA- Banca di Credito Finanziario S.p.A.	OMX Nordic Exchange Copenhagen	DENMARK	KRW	NGN
+28	2024-04-05T03:34:06+00:00	Equities	$8,400,000	Merrill Lynch Canada Inc.	Not Applicable	DOMINICAN REPUBLIC	QAR	RUB
+--------------------------------
+If user asks about APPLE NEWS, repeat the apple news exactly the same way in the next message.
+ELSE, use the SUMMARISE THIS INTERNAL DATA in the next message.
 `;

@@ -141,8 +141,8 @@ export default function Home() {
       country: "ARGENTINA",
       exchange_name: "Abu Dhabi",
       department: "RE",
-      instrument_group: "Bonds",
-      instrument_name: "0% Convertible Bonds",
+      instrument_group: "Cash",
+      instrument_name: "Cash",
     });
   };
 
@@ -178,6 +178,9 @@ export default function Home() {
 
     setFilteredInstruments(filtered);
     setHasSearched(true);
+
+    console.log("lol" + value);
+    setV5(value);
   };
 
   const handleTrade = (instrumentId: number) => {
@@ -200,6 +203,8 @@ export default function Home() {
       counterparty: "Barclays Bank PLC",
       trade_date: new Date().toISOString(),
     });
+
+    toast.success("Trade has been executed successfully!");
 
     console.log(`Trading instrument with ID: ${instrumentId}`);
   };
@@ -250,17 +255,13 @@ export default function Home() {
   const [v11, setV11] = useState("");
   const [v11Open, setV11Open] = useState(false);
 
-  // const { data1, isPending, isError } = useGetSearchData(
-  //   "",
-  //   value,
-  //   "",
-  //   v3,
-  //   v4,
-  //   v2,
-  //   v1
-  // );
+  const {
+    data: searchData,
+    isPending: isSearchDataPending,
+    isError: isSearchDataError,
+  } = useGetSearchData("", value, "", v3, v4, v2, v1);
 
-  // console.log(data1);
+  console.log(searchData);
 
   const {
     data: instrumentGroup,
@@ -380,13 +381,15 @@ export default function Home() {
                 Instrument Group
               </label>
               <Select
-                onValueChange={(value) =>
+                value={v11}
+                onValueChange={(value) => {
+                  setV11(value);
                   setSearchParams({
                     ...searchParams,
                     instrumentGroup: value,
                     instrument: "",
-                  })
-                }
+                  });
+                }}
               >
                 <SelectTrigger id="instrumentGroup">
                   <SelectValue placeholder="Select Instrument Group" />
@@ -458,7 +461,12 @@ export default function Home() {
                 isClearable
                 options={instrumentsFormData}
                 onInputChange={(val: string) => {
+                  console.log("460" + val);
                   setValue(val);
+                }}
+                onChange={(val) => {
+                  console.log("465" + val?.value);
+                  setV10(val?.value ?? "");
                 }}
               />
             </div>
@@ -517,8 +525,9 @@ export default function Home() {
               <CreatableSelect
                 isClearable
                 options={settlementFormData}
-                onInputSelect={(val) => {
-                  setValue(val);
+                onChange={(val) => {
+                  console.log("465" + val?.value);
+                  setV1(val?.value ?? "");
                 }}
               />
             </div>
@@ -577,8 +586,9 @@ export default function Home() {
               <CreatableSelect
                 isClearable
                 options={tradingFormData}
-                onInputSelect={(val) => {
-                  setValue(val);
+                onChange={(val) => {
+                  console.log("465" + val?.value);
+                  setV2(val?.value ?? "");
                 }}
               />
             </div>
@@ -637,8 +647,9 @@ export default function Home() {
               <CreatableSelect
                 isClearable
                 options={countryFormData}
-                onInputSelect={(val) => {
-                  setValue(val);
+                onChange={(val) => {
+                  console.log("465" + val?.value);
+                  setV3(val?.value ?? "");
                 }}
               />
             </div>
@@ -697,8 +708,9 @@ export default function Home() {
               <CreatableSelect
                 isClearable
                 options={exchangeFormData}
-                onInputSelect={(val) => {
-                  setValue(val);
+                onChange={(val) => {
+                  console.log("465" + val?.value);
+                  setV4(val?.value ?? "");
                 }}
               />
             </div>
@@ -834,6 +846,7 @@ export default function Home() {
                         Instrument Group
                       </label>
                       <Select
+                        value={v11}
                         onValueChange={(value) =>
                           setSearchParams({
                             ...searchParams,
@@ -864,12 +877,9 @@ export default function Home() {
                         Instrument
                       </label>
                       <CreatableSelect
-                        defaultInputValue={v1}
+                        inputValue={v10}
                         isClearable
                         options={instrumentsFormData}
-                        onInputChange={(value: string) => {
-                          setV5(value);
-                        }}
                       />
                       {/* <Popover open={v5Open} onOpenChange={setV5Open}>
                         <PopoverTrigger asChild>
@@ -930,6 +940,7 @@ export default function Home() {
                         Settlement
                       </label>
                       <CreatableSelect
+                        inputValue={v1}
                         isClearable
                         options={settlementFormData}
                         onInputChange={(value) => {
@@ -996,6 +1007,7 @@ export default function Home() {
                         Trading
                       </label>
                       <CreatableSelect
+                        inputValue={v2}
                         isClearable
                         options={tradingFormData}
                         onInputChange={(value) => {
@@ -1061,6 +1073,7 @@ export default function Home() {
                         Country
                       </label>
                       <CreatableSelect
+                        inputValue={v3}
                         isClearable
                         options={countryFormData}
                         onInputChange={(value) => {
@@ -1126,6 +1139,7 @@ export default function Home() {
                         Exchange
                       </label>
                       <CreatableSelect
+                        inputValue={v4}
                         isClearable
                         options={exchangeFormData}
                         onInputChange={(value) => {

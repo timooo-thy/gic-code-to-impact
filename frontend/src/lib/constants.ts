@@ -280,8 +280,8 @@ export const frameworks = [
 export const counterParty = {
   trader_id: "30",
   email: "jiamin@gic.com",
-  instrument_name: "0% Convertible Bonds",
-  instrument_group: "Bonds",
+  instrument_name: "Cash",
+  instrument_group: "Cash",
   trade_ccy: "NGN",
   settlement_ccy: "SGD",
   country: "JAPAN",

@@ -17,7 +17,6 @@ export default function FastApiComponent() {
         const data = await response.json();
         setData(data.message);
       } catch (error) {
-        console.error("There was a problem with the fetch operation:", error);
         setData("Error fetching data");
       }
     };

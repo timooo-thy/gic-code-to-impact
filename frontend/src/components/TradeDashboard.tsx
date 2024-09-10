@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   Card,
@@ -6,7 +6,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -14,11 +14,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table';
-import Navbar from '@/components/Navbar';
-import TradeSummaryCard from '@/components/TradeSummaryCard';
-import { useEffect, useState } from 'react';
-import { ChatOverlay } from './ChatOverlay';
+} from "@/components/ui/table";
+import Navbar from "@/components/Navbar";
+import TradeSummaryCard from "@/components/TradeSummaryCard";
+import { useEffect, useState } from "react";
+import { ChatOverlay } from "./ChatOverlay";
+import { toast } from "sonner";
 
 type Trade = {
   instrument: string;
@@ -38,8 +39,8 @@ type Trade = {
 export default function UserDashboard() {
   const [trades, setTrades] = useState<Trade[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [insights, setInsights] = useState<string>('');
-  const [value, setValue] = useState('');
+  const [insights, setInsights] = useState<string>("");
+  const [value, setValue] = useState("");
 
   const context = `
   You are given the following information about the trades a trader at GIC makes:
@@ -75,13 +76,12 @@ ID	Trade Date	Instrument	Amount	Counterparty	Exchange	Risk Country	Trade CCY	Set
 You are a helpful assistant and you should repsond to any queries that trader may have by using the data provided. Respond succinlty, but in properly phrased sentences. This is the question`;
 
   const fetchTrades = async () => {
-    // const trader_id = localStorage.get('trader_id');
     const trader_id = 1;
     const response = await fetch(
       process.env.NEXT_PUBLIC_FASTAPI_URL + `/trades/${trader_id}`
     );
     if (!response.ok) {
-      console.log('Error fetching trades');
+      toast.error("Error fetching trades");
     }
     const trades = (await response.json()) as Trade[];
     setTrades(trades);
@@ -93,14 +93,14 @@ You are a helpful assistant and you should repsond to any queries that trader ma
 
   const handleGenerateResponse = async () => {
     setLoading(true);
-    setInsights(''); // Clear previous response;
+    setInsights(""); // Clear previous response;
     try {
       const res = await fetch(
         `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${process.env.NEXT_PUBLIC_GEMINI_API_KEY}`,
         {
-          method: 'POST',
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             contents: [
@@ -116,11 +116,9 @@ You are a helpful assistant and you should repsond to any queries that trader ma
         }
       );
       const data = await res.json();
-      console.log(data);
       setInsights(data.candidates[0].content.parts[0].text);
     } catch (error) {
-      console.error('Error generating response:', error);
-      setInsights('Failed to generate response.');
+      setInsights("Failed to generate response.");
     } finally {
       setLoading(false);
     }
@@ -131,10 +129,10 @@ You are a helpful assistant and you should repsond to any queries that trader ma
   }, []);
 
   return (
-    <main className='flex min-h-screen w-4/5 flex-col m-auto'>
+    <main className="flex min-h-screen w-4/5 flex-col m-auto">
       <Navbar />
-      <main className='flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8'>
-        <div className='grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 max-h-[500px]'>
+      <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-8">
+        <div className="grid gap-4 md:gap-8 lg:grid-cols-2 xl:grid-cols-3 max-h-[500px]">
           <LimitTable
             trades={trades}
             loading={loading}
@@ -168,48 +166,48 @@ const LimitTable = ({
 }: LimitTableProps) => {
   return (
     <>
-      <Card className='col-span-full h-[400px] flex flex-col'>
-        <CardHeader className='flex-shrink-0'>
+      <Card className="col-span-full h-[400px] flex flex-col">
+        <CardHeader className="flex-shrink-0">
           <CardTitle>Trades</CardTitle>
           <CardDescription>Past 7 days</CardDescription>
         </CardHeader>
-        <CardContent className='flex-grow overflow-auto'>
-          <Table className='relative'>
-            <TableHeader className='sticky top-0 bg-background'>
+        <CardContent className="flex-grow overflow-auto">
+          <Table className="relative">
+            <TableHeader className="sticky top-0 bg-background">
               <TableRow>
-                <TableHead className='text-left'>ID</TableHead>
-                <TableHead className='text-left'>Trade Date</TableHead>
-                <TableHead className='text-left'>Instrument</TableHead>
+                <TableHead className="text-left">ID</TableHead>
+                <TableHead className="text-left">Trade Date</TableHead>
+                <TableHead className="text-left">Instrument</TableHead>
                 <TableHead>Amount</TableHead>
-                <TableHead className='text-left'>Counterparty</TableHead>
-                <TableHead className='text-left'>Exchange</TableHead>
-                <TableHead className='text-left'>Risk Country </TableHead>
-                <TableHead className='text-left'>Trade CCY </TableHead>
-                <TableHead className='text-right pr-2'>
-                  Settlement CCY{' '}
+                <TableHead className="text-left">Counterparty</TableHead>
+                <TableHead className="text-left">Exchange</TableHead>
+                <TableHead className="text-left">Risk Country </TableHead>
+                <TableHead className="text-left">Trade CCY </TableHead>
+                <TableHead className="text-right pr-2">
+                  Settlement CCY{" "}
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {trades.map(trade => (
+              {trades.map((trade) => (
                 <TableRow key={trade.trade_id}>
-                  <TableCell className='font-medium'>
+                  <TableCell className="font-medium">
                     {trade.trade_id}
                   </TableCell>
-                  <TableCell className='font-medium'>
+                  <TableCell className="font-medium">
                     {trade.trade_date}
                   </TableCell>
-                  <TableCell className='font-medium'>
+                  <TableCell className="font-medium">
                     {trade.instrument}
                   </TableCell>
-                  <TableCell className='font-medium'>
+                  <TableCell className="font-medium">
                     ${trade.amount.toLocaleString()}
                   </TableCell>
                   <TableCell>{trade.counterparty}</TableCell>
                   <TableCell>{trade.exchange}</TableCell>
                   <TableCell>{trade.risk_country}</TableCell>
                   <TableCell>{trade.trade_ccy}</TableCell>
-                  <TableCell className='text-right'>
+                  <TableCell className="text-right">
                     {trade.settlement_ccy}
                   </TableCell>
                 </TableRow>
